@@ -1,0 +1,33 @@
+// Import all models to ensure they are registered
+// Use conditional imports to prevent model recompilation errors in development
+import './Firm'
+import './Role'
+import './User'
+import './Client'
+import './Project'
+import './Task'
+import './Document'
+import './ComplianceItem'
+import './AuditLog'
+import './Permission'
+import './LedgerEntry'
+import './FileVersion'
+import './TallySync'
+import './Notification'
+
+// Export models with conditional compilation to prevent overwrite errors
+export { default as Firm } from './Firm'
+export { default as Role } from './Role'
+export { default as User } from './User'
+export { default as Client } from './Client'
+export { default as Project } from './Project'
+export { default as Task } from './Task'
+export { default as Document } from './Document'
+export { default as ComplianceItem } from './ComplianceItem'
+export { default as AuditLog } from './AuditLog'
+export { default as Permission } from './Permission'
+export { default as LedgerEntry } from './LedgerEntry'
+export { default as FileVersion } from './FileVersion'
+export { default as TallySync } from './TallySync'
+export { default as Notification } from './Notification'
+

@@ -1,0 +1,549 @@
+
+> ledgerfy@1.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.32
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1468ms
+ ✓ Compiled /api/auth/login in 199ms (139 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/auth/login/route.ts:27:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/auth/login 500 in 322ms
+ ✓ Compiled in 66ms (139 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+ ⨯ OverwriteModelError: Cannot overwrite `User` model once compiled.
+    at Mongoose.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/mongoose.js:610:13)
+    at eval (webpack-internal:///(rsc)/./models/User.ts:92:114)
+    at (rsc)/./models/User.ts (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/app/api/auth/login/route.js:122:1)
+    at __webpack_require__ (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/webpack-runtime.js:33:42)
+    at eval (webpack-internal:///(rsc)/./app/api/auth/login/route.ts:9:70)
+    at (rsc)/./app/api/auth/login/route.ts (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/app/api/auth/login/route.js:102:1)
+    at __webpack_require__ (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/webpack-runtime.js:33:42)
+    at eval (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Fauth%2Flogin%2Froute&page=%2Fapi%2Fauth%2Flogin%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fauth%2Flogin%2Froute.ts&appDir=%2FUsers%2Fsagar%2FGit%20Projects%2FLedgerfy%2Fledgerfy%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2FUsers%2Fsagar%2FGit%20Projects%2FLedgerfy%2Fledgerfy&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!:15:129)
+    at (rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Fauth%2Flogin%2Froute&page=%2Fapi%2Fauth%2Flogin%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fauth%2Flogin%2Froute.ts&appDir=%2FUsers%2Fsagar%2FGit%20Projects%2FLedgerfy%2Fledgerfy%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2FUsers%2Fsagar%2FGit%20Projects%2FLedgerfy%2Fledgerfy&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D! (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/app/api/auth/login/route.js:92:1)
+    at __webpack_require__ (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/webpack-runtime.js:33:42)
+    at __webpack_exec__ (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/app/api/auth/login/route.js:132:39)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/app/api/auth/login/route.js:133:553
+    at __webpack_require__.X (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/webpack-runtime.js:121:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/app/api/auth/login/route.js:133:47
+    at Object.<anonymous> (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/app/api/auth/login/route.js:136:3)
+    at Module._compile (node:internal/modules/cjs/loader:1692:14)
+    at Object..js (node:internal/modules/cjs/loader:1824:10)
+    at Module.load (node:internal/modules/cjs/loader:1427:32)
+    at Module._load (node:internal/modules/cjs/loader:1250:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1449:12)
+    at mod.require (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/require.js:109:84)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/load-components.js:103:84
+    at async loadComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/load-components.js:103:26)
+    at async DevServer.findPageComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:714:36)
+    at async DevServer.findPageComponents (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1910:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  page: '/api/auth/login'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 668ms (576 modules)
+ POST /api/auth/login 500 in 743ms
+ ✓ Compiled in 28ms (180 modules)
+ ✓ Compiled in 21ms (180 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+Login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/auth/login/route.ts:27:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/auth/login 500 in 34ms
+ ✓ Compiled in 25ms (180 modules)
+ ✓ Compiled in 26ms (180 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+Login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/auth/login/route.ts:27:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/auth/login 500 in 14ms
+ ✓ Compiled in 74ms (182 modules)
+ ✓ Compiled in 92ms (175 modules)
+User admin@testfirm.com logged in successfully from undefined
+ POST /api/auth/login 200 in 9ms
+ ✓ Compiled /middleware in 160ms (140 modules)
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1837ms (1149 modules)
+ GET /dashboard 200 in 1914ms
+ ✓ Compiled in 208ms (602 modules)
+ ✓ Compiled /api/auth/logout in 101ms (540 modules)
+ POST /api/auth/logout 200 in 120ms
+ ✓ Compiled in 147ms (1142 modules)
+ ✓ Compiled in 65ms (1268 modules)
+ ✓ Compiled /_not-found in 137ms (855 modules)
+ GET /login-simple 404 in 188ms
+ ✓ Compiled /api/auth/me in 159ms (368 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+ GET /api/auth/me 401 in 191ms
+ GET /api/auth/me 401 in 2ms
+ ✓ Compiled /login in 171ms (1059 modules)
+ GET /login 200 in 219ms
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+ GET /api/auth/me 401 in 8ms
+ GET /api/auth/me 401 in 2ms
+ ✓ Compiled /api/auth/login in 54ms (544 modules)
+User admin@testfirm.com logged in successfully from undefined
+ POST /api/auth/login 200 in 78ms
+ ✓ Compiled /dashboard in 61ms (620 modules)
+ ✓ Compiled in 354ms (1043 modules)
+ ✓ Compiled in 122ms (1043 modules)
+ GET /login 200 in 70ms
+ ✓ Compiled /api/auth/me in 95ms (539 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+ GET /api/auth/me 401 in 130ms
+ GET /api/auth/me 401 in 2ms
+ ✓ Compiled /api/auth/login in 39ms (619 modules)
+Failed login attempt for admin@defaultfirm.com from undefined
+ POST /api/auth/login 401 in 60ms
+User admin@testfirm.com logged in successfully from undefined
+ POST /api/auth/login 200 in 5ms
+ GET /dashboard 200 in 37ms
+User admin@testfirm.com logged in successfully from undefined
+ POST /api/auth/login 200 in 9ms
+ GET /dashboard 200 in 14ms
+ ✓ Compiled in 278ms (1043 modules)
+ ✓ Compiled in 116ms (1043 modules)
+ ✓ Compiled in 210ms (1043 modules)
+ ✓ Compiled in 110ms (1043 modules)
+ ✓ Compiled in 130ms (1043 modules)
+ ✓ Compiled in 94ms (1043 modules)
+ ✓ Compiled in 124ms (1043 modules)
+ GET /dashboard 200 in 52ms
+ ✓ Compiled in 113ms (1043 modules)
+ ✓ Compiled in 159ms (1033 modules)
+ GET /dashboard 200 in 36ms
+ ✓ Compiled in 178ms (1009 modules)
+🔍 DashboardLayout Debug:
+- user: null
+- user.permissions: undefined
+- sidebarOpen: false
+ GET /dashboard 200 in 19ms
+ ✓ Compiled in 89ms (1023 modules)
+ ✓ Compiled in 109ms (1009 modules)
+🔍 DashboardLayout Debug:
+- user: null
+- user.permissions: undefined
+- sidebarOpen: false
+ GET /dashboard 200 in 22ms
+ ✓ Compiled in 114ms (1009 modules)
+ ✓ Compiled /_not-found in 390ms (998 modules)
+ GET /sw.js 404 in 435ms
+ GET /login 200 in 49ms
+ ✓ Compiled /api/auth/me in 127ms (523 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+ GET /api/auth/me 401 in 160ms
+ GET /api/auth/me 401 in 2ms
+ GET /sw.js 404 in 31ms
+ ✓ Compiled in 87ms (590 modules)
+ ✓ Compiled in 56ms (590 modules)
+ ✓ Compiled in 47ms (590 modules)
+ ✓ Compiled in 47ms (419 modules)
+ ✓ Compiled in 267ms (1023 modules)
+ ✓ Compiled in 103ms (1023 modules)
+ ✓ Compiled in 163ms (1043 modules)
+ ✓ Compiled in 97ms (1043 modules)
+ ✓ Compiled in 113ms (1029 modules)
+ ✓ Compiled in 58ms (1029 modules)
+ ✓ Compiled /api/auth/login in 247ms (549 modules)
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+Login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/auth/login/route.ts:29:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/auth/login 500 in 295ms
+ ✓ Compiled in 136ms (1159 modules)
+ ✓ Compiled in 93ms (1156 modules)
+ ✓ Compiled in 76ms (1043 modules)
+ ✓ Compiled in 46ms (607 modules)
+ ✓ Compiled in 89ms (607 modules)
+ ✓ Compiled in 48ms (607 modules)
+ ✓ Compiled /api/auth/login in 52ms (549 modules)
+🔍 Login attempt started
+✅ Database connected
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+📧 Login attempt for: admin@testfirm.com
+❌ Login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/auth/login/route.ts:32:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/auth/login 500 in 111ms
+ ✓ Compiled in 68ms (607 modules)
+ ✓ Compiled in 267ms (1296 modules)
+ ✓ Compiled in 50ms (607 modules)
+ ✓ Compiled /api/test in 64ms (551 modules)
+🧪 Test endpoint called
+✅ Database connected in test
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+👥 User count: 4
+ GET /api/test 200 in 80ms
+ ✓ Compiled in 71ms (607 modules)
+ ✓ Compiled in 178ms (1169 modules)
+ ✓ Compiled in 45ms (607 modules)
+ ✓ Compiled /api/test-login in 35ms (549 modules)
+🧪 Test login started
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+📧 Test login for: admin@testfirm.com
+✅ Database connected
+❌ Test login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/test-login/route.ts:25:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/test-login 500 in 72ms
+ ✓ Compiled in 54ms (549 modules)
+ ✓ Compiled in 32ms (550 modules)
+ ✓ Compiled in 56ms (436 modules)
+ ✓ Compiled /api/auth/login in 139ms (549 modules)
+🔍 Login attempt started
+✅ Database connected
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+📧 Login attempt for: admin@testfirm.com
+❌ Login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/auth/login/route.ts:32:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/auth/login 500 in 203ms
+ ✓ Compiled /api/test-login in 35ms (551 modules)
+🧪 Test login started
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+📧 Test login for: admin@testfirm.com
+✅ Database connected
+❌ Test login error: MissingSchemaError: Schema hasn't been registered for model "Role".
+Use mongoose.model(name, schema)
+    at NativeConnection.model (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/connection.js:1493:13)
+    at _getModelFromConn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:579:15)
+    at addModelNamesToMap (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:507:17)
+    at getModelsMapForPopulate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/helpers/populate/getModelsMapForPopulate.js:208:7)
+    at _populatePath (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4466:21)
+    at model.populate (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/model.js:4433:21)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2654:11
+    at _init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3330:5)
+    at Document.init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:654:5)
+    at Document.$init (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/document.js:667:42)
+    at Object.createModelAndInit (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/queryHelpers.js:119:12)
+    at completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:3308:11)
+    at Query._completeOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2650:3)
+    at /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2712:10
+    at new Promise (<anonymous>)
+    at model.Query._findOne (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:2711:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query.exec (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/mongoose/lib/query.js:4627:63)
+    at async POST (webpack-internal:///(rsc)/./app/api/test-login/route.ts:25:22)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/test-login 500 in 59ms
+ ✓ Compiled in 161ms (1161 modules)
+ ✓ Compiled in 71ms (1156 modules)
+ ✓ Compiled in 47ms (607 modules)
+ ✓ Compiled in 44ms (607 modules)
+ ✓ Compiled /api/auth/login in 75ms (552 modules)
+🔍 Login attempt started
+✅ Database connected
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+📧 Login attempt for: admin@testfirm.com
+👤 User found: Yes
+🔐 Password valid: false
+Failed login attempt for user 68b71c5809a1b59ecd8b4660 from undefined
+ POST /api/auth/login 401 in 313ms
+ ✓ Compiled /api/test-login in 24ms (554 modules)
+🧪 Test login started
+(node:67909) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+📧 Test login for: admin@testfirm.com
+✅ Database connected
+👤 User found: Yes
+👤 User details: {
+  id: new ObjectId('68b71c5809a1b59ecd8b4660'),
+  email: 'admin@testfirm.com',
+  firstName: 'Admin',
+  roleId: new ObjectId('68b71c5809a1b59ecd8b4656'),
+  permissions: [ '*' ]
+}
+🔐 Password valid: false
+ POST /api/test-login 401 in 247ms
+ ✓ Compiled in 63ms (554 modules)
+ ✓ Compiled in 36ms (554 modules)
+ ✓ Compiled in 30ms (436 modules)
+ ✓ Compiled in 308ms (1043 modules)

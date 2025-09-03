@@ -1,0 +1,789 @@
+
+> ledgerfy@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.5.2
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.103:3000
+
+ ✓ Starting...
+ ✓ Ready in 1083ms
+[Error: Cannot apply unknown utility class `bg-white`. Are you using CSS modules or similar and missing `@reference`? https://tailwindcss.com/docs/functions-and-directives#reference-directive]
+ ○ Compiling / ...
+ ✓ Compiled / in 1492ms (582 modules)
+ GET / 200 in 1673ms
+[Error: Cannot apply unknown utility class `bg-white`. Are you using CSS modules or similar and missing `@reference`? https://tailwindcss.com/docs/functions-and-directives#reference-directive]
+ ✓ Compiled in 125ms (573 modules)
+ GET / 200 in 126ms
+ GET / 200 in 67ms
+ ✓ Compiled in 127ms (559 modules)
+ GET / 200 in 46ms
+ GET / 200 in 39ms
+ ✓ Compiled in 69ms (559 modules)
+ GET / 200 in 41ms
+ ✓ Compiled in 83ms (559 modules)
+ ✓ Compiled in 228ms (563 modules)
+ GET / 200 in 149ms
+ ✓ Compiled in 61ms (563 modules)
+ GET / 200 in 113ms
+ ✓ Compiled /dashboard in 222ms (604 modules)
+ GET /dashboard 200 in 321ms
+ GET / 200 in 71ms
+ GET / 200 in 30ms
+ GET / 200 in 57ms
+ ✓ Compiled /login in 169ms (598 modules)
+ GET /login 200 in 232ms
+(node:14826) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled in 45ms (260 modules)
+ ✓ Compiled in 68ms (260 modules)
+ ✓ Compiled in 21ms (260 modules)
+ ✓ Compiled in 34ms (260 modules)
+ ✓ Compiled in 26ms (260 modules)
+ ⨯ ./node_modules/next/dist/lib/framework/boundary-components.js
+Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/lib/framework/boundary-components.js'
+
+Import trace for requested module:
+./node_modules/next/dist/lib/framework/boundary-components.js
+ ⨯ ./node_modules/next/dist/lib/framework/boundary-components.js
+Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/node_modules/next/dist/lib/framework/boundary-components.js'
+
+Import trace for requested module:
+./node_modules/next/dist/lib/framework/boundary-components.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ app/login/page.tsx
+Invariant: Expected to replace at least one import
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:69:7
+Module not found: Can't resolve '@vercel/turbopack-ecmascript-runtime/dev/client/hmr-client.ts'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js
+./node_modules/next/dist/client/components/app-router.js
+./node_modules/next/dist/client/app-call-server.js
+./node_modules/next/dist/client/app-index.js
+./node_modules/next/dist/client/app-next-dev.js
+ ⨯ ./app/dashboard/page.tsx:19:1
+Module not found: Can't resolve '@/components/ui/card'
+  17 | import { PageHeader, PageHeaderActions } from '@/components/layout/PageHeader'
+  18 | import { Button } from '@/components/ui/button'
+> 19 | import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+     | ^
+  20 | import { Badge } from '@/components/ui/badge'
+  21 | import { cn } from '@/lib/utils'
+  22 |
+
+https://nextjs.org/docs/messages/module-not-found
+ ⨯ ./app/dashboard/page.tsx:20:1
+Module not found: Can't resolve '@/components/ui/badge'
+  18 | import { Button } from '@/components/ui/button'
+  19 | import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+> 20 | import { Badge } from '@/components/ui/badge'
+     | ^
+  21 | import { cn } from '@/lib/utils'
+  22 |
+  23 | // Mock data - replace with actual data from API
+
+https://nextjs.org/docs/messages/module-not-found
+ ⨯ ./app/dashboard/page.tsx:20:1
+Module not found: Can't resolve '@/components/ui/badge'
+  18 | import { Button } from '@/components/ui/button'
+  19 | import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+> 20 | import { Badge } from '@/components/ui/badge'
+     | ^
+  21 | import { cn } from '@/lib/utils'
+  22 |
+  23 | // Mock data - replace with actual data from API
+
+https://nextjs.org/docs/messages/module-not-found
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ app/login/page.tsx
+Invariant: Expected to replace at least one import
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ○ Compiling /_error ...
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+ GET / 500 in 1645ms
+ GET / 500 in 10ms
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ GET / 500 in 48995ms
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ [TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
