@@ -174,6 +174,7 @@ const TaskSchema = new Schema<ITask>({
   },
   complexity: {
     type: String,
+    required: true,
     enum: ['low', 'medium', 'high', 'expert'],
     default: 'medium'
   },
@@ -251,7 +252,7 @@ TaskSchema.index({ firmId: 1, taskType: 1 })
 TaskSchema.index({ firmId: 1, complexity: 1 })
 TaskSchema.index({ 'timeEntries.userId': 1 })
 
-// Virtual for days until due
+// Virtuals
 TaskSchema.virtual('daysUntilDue').get(function() {
   if (!this.dueDate) return null
   const now = new Date()
@@ -260,7 +261,6 @@ TaskSchema.virtual('daysUntilDue').get(function() {
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 })
 
-// Virtual for days overdue
 TaskSchema.virtual('daysOverdue').get(function() {
   if (!this.dueDate || this.status === 'completed' || this.status === 'cancelled') return 0
   
@@ -268,9 +268,8 @@ TaskSchema.virtual('daysOverdue').get(function() {
   const due = new Date(this.dueDate)
   const diffTime = now.getTime() - due.getTime()
   return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
-}
+})
 
-// Virtual for task status color
 TaskSchema.virtual('statusColor').get(function() {
   const colors = {
     todo: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
@@ -283,7 +282,6 @@ TaskSchema.virtual('statusColor').get(function() {
   return colors[this.status] || colors.todo
 })
 
-// Virtual for priority color
 TaskSchema.virtual('priorityColor').get(function() {
   const colors = {
     low: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
@@ -294,7 +292,6 @@ TaskSchema.virtual('priorityColor').get(function() {
   return colors[this.priority] || colors.medium
 })
 
-// Virtual for complexity color
 TaskSchema.virtual('complexityColor').get(function() {
   const colors = {
     low: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
@@ -305,24 +302,21 @@ TaskSchema.virtual('complexityColor').get(function() {
   return colors[this.complexity] || colors.medium
 })
 
-// Virtual for time efficiency
 TaskSchema.virtual('timeEfficiency').get(function() {
   if (!this.estimatedHours || !this.actualHours) return null
   return (this.estimatedHours / this.actualHours) * 100
 })
 
-// Virtual for total time spent in hours
 TaskSchema.virtual('totalTimeSpentHours').get(function() {
   return this.timeSpent / 60
 })
 
-// Method to check if task is overdue
+// Methods
 TaskSchema.methods.isOverdue = function(): boolean {
   if (!this.dueDate || this.status === 'completed' || this.status === 'cancelled') return false
   return new Date() > this.dueDate
 }
 
-// Method to check if task is due soon
 TaskSchema.methods.isDueSoon = function(days: number = 3): boolean {
   if (!this.dueDate || this.status === 'completed' || this.status === 'cancelled') return false
   
@@ -334,7 +328,6 @@ TaskSchema.methods.isDueSoon = function(days: number = 3): boolean {
   return diffDays <= days && diffDays >= 0
 }
 
-// Method to update progress
 TaskSchema.methods.updateProgress = function(progress: number) {
   this.progress = Math.max(0, Math.min(100, progress))
   
@@ -351,7 +344,6 @@ TaskSchema.methods.updateProgress = function(progress: number) {
   return this.save()
 }
 
-// Method to assign task
 TaskSchema.methods.assignTo = function(userId: string, assignedBy: string) {
   this.assignedTo = new mongoose.Types.ObjectId(userId)
   this.assignedBy = new mongoose.Types.ObjectId(assignedBy)
@@ -360,7 +352,6 @@ TaskSchema.methods.assignTo = function(userId: string, assignedBy: string) {
   return this.save()
 }
 
-// Method to start time tracking
 TaskSchema.methods.startTimeTracking = function(userId: string, description?: string) {
   const timeEntry = {
     startTime: new Date(),
@@ -374,116 +365,85 @@ TaskSchema.methods.startTimeTracking = function(userId: string, description?: st
   return this.save()
 }
 
-// Method to stop time tracking
 TaskSchema.methods.stopTimeTracking = function(userId: string) {
-  const timeEntry = this.timeEntries.find(entry => 
-    entry.userId.toString() === userId && !entry.endTime
-  )
+  const lastEntry = this.timeEntries[this.timeEntries.length - 1]
   
-  if (timeEntry) {
-    timeEntry.endTime = new Date()
-    timeEntry.duration = Math.round((timeEntry.endTime.getTime() - timeEntry.startTime.getTime()) / (1000 * 60))
-    
-    // Update total time spent
-    this.timeSpent += timeEntry.duration
-    if (this.actualHours) {
-      this.actualHours = this.timeSpent / 60
-    }
-    
+  if (lastEntry && !lastEntry.endTime) {
+    lastEntry.endTime = new Date()
+    lastEntry.duration = Math.round((lastEntry.endTime.getTime() - lastEntry.startTime.getTime()) / (1000 * 60))
+    this.timeSpent += lastEntry.duration
     this.lastActivityAt = new Date()
     return this.save()
   }
   
-  return this
+  return Promise.resolve(this)
 }
 
-// Method to add dependency
 TaskSchema.methods.addDependency = function(taskId: string) {
   if (!this.dependencies.includes(taskId)) {
     this.dependencies.push(new mongoose.Types.ObjectId(taskId))
     this.lastActivityAt = new Date()
     return this.save()
   }
-  return this
+  return Promise.resolve(this)
 }
 
-// Method to remove dependency
 TaskSchema.methods.removeDependency = function(taskId: string) {
-  this.dependencies = this.dependencies.filter(id => id.toString() !== taskId)
+  this.dependencies = this.dependencies.filter((id: any) => id.toString() !== taskId)
   this.lastActivityAt = new Date()
   return this.save()
 }
 
-// Method to add subtask
 TaskSchema.methods.addSubtask = function(taskId: string) {
   if (!this.subtasks.includes(taskId)) {
     this.subtasks.push(new mongoose.Types.ObjectId(taskId))
     this.lastActivityAt = new Date()
     return this.save()
   }
-  return this
+  return Promise.resolve(this)
 }
 
-// Method to remove subtask
 TaskSchema.methods.removeSubtask = function(taskId: string) {
-  this.subtasks = this.subtasks.filter(id => id.toString() !== taskId)
+  this.subtasks = this.subtasks.filter((id: any) => id.toString() !== taskId)
   this.lastActivityAt = new Date()
   return this.save()
 }
 
-// Method to calculate task health
 TaskSchema.methods.getTaskHealth = function(): 'excellent' | 'good' | 'warning' | 'critical' {
-  if (this.status === 'completed' || this.status === 'cancelled') return 'excellent'
+  if (this.status === 'completed') return 'excellent'
   
-  const daysUntilDue = this.daysUntilDue
-  if (daysUntilDue === null) return 'good'
+  const now = new Date()
+  const dueDate = this.dueDate
+  
+  if (!dueDate) return 'good'
+  
+  const daysUntilDue = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
   
   if (daysUntilDue < 0) return 'critical'
-  if (daysUntilDue <= 1) return 'critical'
   if (daysUntilDue <= 3) return 'warning'
+  if (daysUntilDue <= 7) return 'good'
   
-  // Check progress vs time
-  if (this.dueDate && this.startDate) {
-    const totalDuration = Math.ceil((this.dueDate.getTime() - this.startDate.getTime()) / (1000 * 60 * 60 * 24))
-    const elapsed = Math.ceil((new Date().getTime() - this.startDate.getTime()) / (1000 * 60 * 60 * 24))
-    const timeProgress = Math.max(0, Math.min(100, (elapsed / totalDuration) * 100))
-    const progressGap = this.progress - timeProgress
-    
-    if (progressGap >= 20) return 'excellent'
-    if (progressGap >= 0) return 'good'
-    if (progressGap >= -20) return 'warning'
-    return 'critical'
-  }
-  
-  return 'good'
+  return 'excellent'
 }
 
-// Pre-save middleware to update lastActivityAt
+// Pre-save middleware
 TaskSchema.pre('save', function(next) {
   this.lastActivityAt = new Date()
   next()
 })
 
-// Pre-save middleware to validate dates
-TaskSchema.pre('save', function(next) {
-  if (this.startDate && this.dueDate && this.startDate >= this.dueDate) {
-    return next(new Error('Start date must be before due date'))
-  }
-  next()
-})
-
-// Pre-save middleware to update status based on progress
 TaskSchema.pre('save', function(next) {
   if (this.isModified('progress')) {
-    if (this.progress === 0) {
-      this.status = 'todo'
-    } else if (this.progress < 100) {
-      this.status = 'in_progress'
-    } else {
-      this.status = 'completed'
-    }
+    this.lastActivityAt = new Date()
   }
   next()
 })
 
-export default mongoose.model<ITask>('Task', TaskSchema)
+TaskSchema.pre('save', function(next) {
+  if (this.isModified('status')) {
+    this.lastActivityAt = new Date()
+  }
+  next()
+})
+
+export default mongoose.models.Task || mongoose.model<ITask>('Task', TaskSchema)

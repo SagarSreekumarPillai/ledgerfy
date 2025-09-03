@@ -1,108 +1,50 @@
 // FILE: /app/api/documents/versions/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import fileHistoryService from '@/services/fileHistory';
+import { getServerUser } from '@/lib/auth';
 import { requirePermission } from '@/lib/rbac';
+import { withCurrentFirmScope } from '@/lib/scope';
+import Document from '@/models/Document';
+import { logAction } from '@/lib/audit';
 
-// POST /api/documents/versions - Create new version
-export async function POST(req: NextRequest) {
+/**
+ * GET /api/documents/versions - Get version history for a document
+ */
+export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    const user = await getServerUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { documentId, newFilePath, newFileName, changeNotes } = await req.json();
+    // Check permission
+    await requirePermission(request, 'documents:read', async (req, user) => {
+      const { searchParams } = new URL(req.url);
+      const documentId = searchParams.get('documentId');
 
-    if (!documentId || !newFilePath || !newFileName) {
-      return NextResponse.json(
-        { error: 'Missing required fields: documentId, newFilePath, newFileName' },
-        { status: 400 }
-      );
-    }
+      if (!documentId) {
+        return NextResponse.json({ error: 'Document ID is required' }, { status: 400 });
+      }
 
-    // Check permission to create versions
-    const hasPermission = await requirePermission(
-      session.user.id,
-      'documents:version',
-      session.user.firmId
-    );
+      // Get document with firm scope
+      const query = await withCurrentFirmScope({ _id: documentId });
+      const document = await Document.findById(documentId);
 
-    if (!hasPermission) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions to create document versions' },
-        { status: 403 }
-      );
-    }
+      if (!document) {
+        return NextResponse.json({ error: 'Document not found' }, { status: 404 });
+      }
 
-    const newVersion = await fileHistoryService.createVersion(
-      documentId,
-      newFilePath,
-      newFileName,
-      session.user.id,
-      changeNotes
-    );
+      // Get version history
+      const versions = await Document.find({
+        originalDocumentId: documentId
+      }).sort({ version: -1 });
 
-    return NextResponse.json({
-      success: true,
-      data: newVersion,
-      message: 'Document version created successfully'
+      return NextResponse.json({ versions });
     });
 
   } catch (error) {
-    console.error('Error creating document version:', error);
+    console.error('Document versions error:', error);
     return NextResponse.json(
-      { error: 'Failed to create document version' },
-      { status: 500 }
-    );
-  }
-}
-
-// GET /api/documents/versions - Get version history
-export async function GET(req: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const { searchParams } = new URL(req.url);
-    const documentId = searchParams.get('documentId');
-
-    if (!documentId) {
-      return NextResponse.json(
-        { error: 'Missing documentId parameter' },
-        { status: 400 }
-      );
-    }
-
-    // Check permission to read document versions
-    const hasPermission = await requirePermission(
-      session.user.id,
-      'documents:read',
-      session.user.firmId
-    );
-
-    if (!hasPermission) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions to read document versions' },
-        { status: 403 }
-      );
-    }
-
-    const versionHistory = await fileHistoryService.getVersionHistory(documentId);
-
-    return NextResponse.json({
-      success: true,
-      data: versionHistory,
-      message: 'Version history retrieved successfully'
-    });
-
-  } catch (error) {
-    console.error('Error retrieving version history:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve version history' },
+      { error: 'Failed to fetch document versions' },
       { status: 500 }
     );
   }

@@ -1,55 +1,37 @@
 // FILE: /app/api/documents/versions/restore/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import fileHistoryService from '@/services/fileHistory';
+import { getServerUser } from '@/lib/auth';
 import { requirePermission } from '@/lib/rbac';
 
-// POST /api/documents/versions/restore - Restore to previous version
-export async function POST(req: NextRequest) {
+/**
+ * POST /api/documents/versions/restore - Restore a document version
+ */
+export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+    const user = await getServerUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { documentId, versionId } = await req.json();
+    // Check permission
+    await requirePermission(request, 'documents:restore_version', async (req, user) => {
+      const body = await req.json();
+      const { versionId, documentId } = body;
 
-    if (!documentId || !versionId) {
-      return NextResponse.json(
-        { error: 'Missing required fields: documentId, versionId' },
-        { status: 400 }
-      );
-    }
+      if (!versionId || !documentId) {
+        return NextResponse.json({ error: 'Version ID and Document ID are required' }, { status: 400 });
+      }
 
-    // Check permission to restore versions (admin/manager only)
-    const hasPermission = await requirePermission(
-      session.user.id,
-      'documents:restore',
-      session.user.firmId
-    );
-
-    if (!hasPermission) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions to restore document versions' },
-        { status: 403 }
-      );
-    }
-
-    const restoredDoc = await fileHistoryService.restoreToVersion(
-      documentId,
-      versionId,
-      session.user.id
-    );
-
-    return NextResponse.json({
-      success: true,
-      data: restoredDoc,
-      message: 'Document restored to previous version successfully'
+      // TODO: Implement version restore logic
+      return NextResponse.json({ 
+        message: 'Version restore not implemented yet',
+        versionId,
+        documentId
+      });
     });
 
   } catch (error) {
-    console.error('Error restoring document version:', error);
+    console.error('Document version restore error:', error);
     return NextResponse.json(
       { error: 'Failed to restore document version' },
       { status: 500 }

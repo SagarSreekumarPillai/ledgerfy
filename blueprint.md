@@ -1,679 +1,695 @@
-# Ledgerfy — Updated Blueprint (RBAC integrated, single unified app)
+# Ledgerfy — Full Blueprint (copy-paste this into `blueprint.md`)
 
-Below is the full, copy-paste-ready blueprint for **Ledgerfy** — one unified Next.js app (App Router) with modular structure.
-I’ve integrated a complete Role-Based Access Control (RBAC) system that blends into every milestone and step. This includes directory tree, data models, API contracts, UI components, middleware, tests and explicit commit-by-commit development instructions.
-
-Read it. Feed it to Cursor. Build it.
+Ledgerfy is a **single, unified web app** for Indian CA firms: ledger + documents + projects + compliance + client portal — with granular RBAC, file versioning, audit trails, Tally import, and a modern, fast UI.
 
 ---
 
-# Quick summary
+## 0) Goals (what we’re building)
 
-Ledgerfy = single Next.js monorepo with modular folders (ledger, projects, dms, compliance, analytics).
-Core addition: robust RBAC + user management allowing preset roles and fully customizable role-permission maps. Audit logs and strict firm scoping enforce data separation.
+* **One app, many modules:** Ledger, DMS (WorkDrive+), Projects/Tasks, Compliance, Analytics, Client Portal.
+* **India-first:** GST, TDS, ROC/MCA workflows; date/number formats; client portal localization.
+* **Enterprise guardrails:** Firm scoping, RBAC with custom roles, audit logs, MFA, data retention.
+* **Modern UX:** Keyboard-first, breadcrumbs, drawers, inline edits, skeleton loading, dark mode.
+
+Non-goals (v1): Payroll, complex inventory, deep CRM. Provide extensibility hooks.
 
 ---
 
-# Monorepo structure (single app, modular)
+## 1) Architecture
+
+**Stack:** Next.js (App Router, TypeScript), MongoDB (Mongoose), Tailwind + shadcn/ui, NextAuth (or Supabase Auth), S3-compatible storage, BullMQ workers (Redis), Vercel deploy.
+
+**App shape:** Single Next.js app; modules are folders with routes + server actions + shared components.
+
+---
+
+## 2) Repository layout
 
 ```
 /ledgerfy
-  /app                      # Next.js App Router pages + server actions
+  /app
     /dashboard
-    /ledger                 # ledger module (Tally import, ledgers)
-    /projects               # projects & tasks
-    /dms                    # document management & client portal
-    /compliance             # compliance calendar & items
-    /analytics              # dashboards & reports
-    /settings               # org, users, roles, integrations
-    /api                    # server-side API route handlers (if separate)
-  /components               # shared UI (shadcn primitives)
-    /rbac
-    /drive
-    /tasks
-    /forms
-    /layout
-  /lib                      # helpers: db, auth, rbac, utils
-    /db.ts
-    /auth.ts
-    /rbac.ts
-  /models                   # Mongoose schemas
+    /ledger
+      /import
+      /entries
+    /projects
+      /[projectId]
+    /dms
+      /files
+    /compliance
+      /calendar
+      /items
+    /analytics
+    /client-portal
+    /settings
+      /organization
+      /users
+      /roles
+      /integrations
+    /api  # Route handlers if needed beyond server actions
+  /components
+    /layout         # Header, Sidebar, Breadcrumbs, PageShell
+    /ui             # Button, Card, Table, Modal, Drawer, Tabs, Toast
+    /rbac           # RequirePermission, PermissionGuard
+    /drive          # FileList, Upload, VersionList, ShareDialog
+    /tasks          # Kanban, TaskCard, Checklist
+    /forms          # Input, DatePicker, Select, FormRow
+    /feedback       # Skeletons, EmptyStates, LoadingBar
+    /charts         # Bar, Line, Donut
+  /lib
+    auth.ts         # getServerUser, requireAuth
+    db.ts           # mongoose connect
+    rbac.ts         # permissions, requirePermission
+    scope.ts        # firm scoping helpers
+    storage.ts      # S3/Supabase storage, presigned URLs
+    audit.ts        # logAction, export
+    tally.ts        # CSV/XML parsers
+    queue.ts        # BullMQ init
+    i18n.ts         # next-intl or i18next config
+  /models
     User.ts
     Firm.ts
-    Client.ts
     Role.ts
-    Permission.ts
+    Client.ts
     Project.ts
     Task.ts
     Document.ts
+    FileVersion.ts
     ComplianceItem.ts
-    AuditLog.ts
     LedgerEntry.ts
     TallySync.ts
-  /workers                  # BullMQ workers (OCR, reminders, tally)
-  /scripts                  # seed, migrations, importers
-  /tests                    # unit & e2e tests
-  /infra                    # IaC (terraform / cloudformation)
-  package.json
-  pnpm-workspace.yaml
-  tsconfig.json
+    AuditLog.ts
+    Notification.ts
+  /workers
+    reminders.ts    # compliance reminders
+    ocr.ts          # optional OCR for PDFs
+    tally-import.ts # async large imports
+  /scripts
+    seed.ts
+    migrate.ts
+  /tests
+    unit/
+    e2e/
+  /public
+  /styles
+    globals.css
   .env.example
+  package.json
+  pnpm-lock.yaml
+  README.md
 ```
 
 ---
 
-# RBAC: design & rules
+## 3) Data model (Mongoose — abbreviated)
 
-### Roles (preset)
+> Include file header comments like `// FILE: /models/User.ts` for Cursor.
 
-* `admin` / `partner` — full rights
-* `manager` — project & review rights; no billing controls
-* `senior` — can review, run reconciliations, produce reports
-* `associate` — work on assigned tasks; upload docs
-* `client` — limited portal-only access
-
-### Permissions (fine-grained)
-
-Permissions are atomic strings. Example list:
-
-* `org:read`, `org:write`
-* `users:invite`, `users:update`, `users:delete`
-* `clients:read`, `clients:write`
-* `projects:create`, `projects:update`, `projects:delete`
-* `tasks:assign`, `tasks:update_status`, `tasks:timelog`
-* `documents:upload`, `documents:read`, `documents:download`, `documents:share`, `documents:delete`
-* `ledger:read`, `ledger:write`, `tally:import`
-* `compliance:read`, `compliance:write`, `compliance:mark_filed`
-* `analytics:read`
-* `audit:read`
-
-### Role model
-
-Store roles as documents with a permissions array so firms can customize.
-
-`Role` document example:
-
-```json
-{
-  "_id": "...",
-  "firmId": "...",
-  "name": "manager",
-  "permissions": ["projects:create","projects:update","clients:read","documents:read"]
-}
-```
-
-### Enforcement
-
-* Middleware checks request user and role permissions for each protected API route.
-* Frontend receives current user permissions from `/api/users/me` and adapts UI (hide buttons, prevent actions).
-* All DB queries include firm scoping: every query must filter by `firmId`.
-
-### Custom roles
-
-* Admins can create a role by selecting permissions from a checklist UI and save it to the `Role` collection.
-* Provide validation to prevent privilege escalation (e.g., only `admin` can create roles granting `users:delete`).
-
-### Invite flow & MFA
-
-* Invite: admin enters email + role → system sends invite link (time-bound JWT) → invited user sets password.
-* Optional MFA: TOTP (authenticator app) or SMS OTP. Admin can enforce MFA policy per firm.
-
-### Audit trail
-
-* Every critical action creates an `AuditLog` record: `{ actorUserId, actorRole, action, entityType, entityId, ip, timestamp, meta }`.
-* Audit logs are append-only; admins can export them.
-
----
-
-# Models (key Mongoose schemas — include in `/models`)
-
-Provide these files with exact paths as comments (Cursor rule).
-
-Examples (abbreviated):
-
-**/models/User.ts**
+**User.ts**
 
 ```ts
-// FILE: /models/User.ts
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
+  email: { type: String, unique: true, required: true },
   name: String,
   phone: String,
-  roleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
-  firmId: { type: mongoose.Schema.Types.ObjectId, ref: 'Firm' },
+  roleId: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
+  firmId: { type: mongoose.Schema.Types.ObjectId, ref: "Firm", index: true },
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Client" }, // for client-portal users
   passwordHash: String,
   mfaEnabled: { type: Boolean, default: false },
+  status: { type: String, enum: ["active","suspended"], default: "active" },
   createdAt: { type: Date, default: Date.now }
 });
-export default mongoose.model('User', UserSchema);
+export default mongoose.model("User", UserSchema);
 ```
 
-**/models/Role.ts**
+**Role.ts**
 
 ```ts
-// FILE: /models/Role.ts
 const RoleSchema = new mongoose.Schema({
-  firmId: { type: mongoose.Schema.Types.ObjectId, ref: 'Firm', required: true },
+  firmId: { type: mongoose.Schema.Types.ObjectId, ref: "Firm", required: true },
   name: { type: String, required: true },
-  permissions: [String],
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  permissions: { type: [String], default: [] },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   createdAt: { type: Date, default: Date.now }
 });
-export default mongoose.model('Role', RoleSchema);
+export default mongoose.model("Role", RoleSchema);
 ```
 
-**/models/AuditLog.ts**
+**AuditLog.ts**
 
 ```ts
-// FILE: /models/AuditLog.ts
-const AuditLog = new mongoose.Schema({
-  actorUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+const AuditLogSchema = new mongoose.Schema({
+  actorUserId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   actorRole: String,
-  action: String,
-  entityType: String,
+  action: String,             // e.g., "documents.upload"
+  entityType: String,         // "Document","LedgerEntry","Role"
   entityId: String,
+  firmId: { type: mongoose.Schema.Types.ObjectId, ref: "Firm", index: true },
   ip: String,
   meta: mongoose.Schema.Types.Mixed,
   timestamp: { type: Date, default: Date.now }
-});
-export default mongoose.model('AuditLog', AuditLog);
+}, { minimize: false });
+export default mongoose.model("AuditLog", AuditLogSchema);
 ```
 
-(Other models follow earlier blueprint — include Task, Project, Document, ComplianceItem, LedgerEntry, TallySync.)
-
----
-
-# API contract additions for RBAC & Users
-
-Key endpoints to implement (place under `/app/api` or `/app/route`):
-
-**Auth & Users**
-
-* `POST /api/auth/login` — email/password -> tokens
-* `POST /api/auth/refresh` — refresh token
-* `POST /api/auth/invite` — admin invites user `{ email, roleId }`
-* `POST /api/auth/accept-invite` — accept invite with token + set password
-* `GET /api/users/me` — returns `user` + `role` + `permissions`
-* `GET /api/users?firmId=...` — admin-only: list firm users
-* `POST /api/users` — admin: create user (invite flow)
-* `PATCH /api/users/:id` — admin: update role/status
-* `DELETE /api/users/:id` — admin: remove user
-
-**Roles & Permissions**
-
-* `GET /api/roles?firmId=...` — list roles (admin)
-* `POST /api/roles` — create custom role (admin)
-* `PATCH /api/roles/:id` — update role (admin)
-* `DELETE /api/roles/:id` — delete role (admin)
-
-**Audit Logs**
-
-* `GET /api/audit?firmId=...&entityType=...` — admin/audit role
-
-All protected endpoints must carry middleware `requirePermissions(['projects:create'])` or similar.
-
----
-
-# Frontend: UI components & pages for RBAC
-
-Paths and components to create:
-
-* `/app/settings/users/page.tsx` — User management table (invite, edit role, deactivate)
-* `/app/settings/roles/page.tsx` — Role & Permissions builder UI (checkbox grid of permissions)
-* `/components/rbac/RequirePermission.tsx` — wrapper component that shows children only if permission present
-* `/components/layout/TopNavUserMenu.tsx` — shows current user, role, quick actions (MFA toggle)
-* `/app/clients/[id]/page.tsx` — will use server session to ensure client can only view their own clientId
-
-UI behavior:
-
-* Buttons for restricted actions must be hidden if user lacks permission. Do not rely on client-only checks — backend must block too.
-* Admin role pages accessible only to users with `users:invite` or `org:write`.
-
----
-
-# Middleware & helpers
-
-Create `/lib/rbac.ts` and `/lib/auth.ts`:
-
-`rbac.ts` provides:
-
-* `getPermissionsForUser(user)` — returns aggregated permissions based on role doc
-* `requirePermission(permission)` — server-side wrapper for API routes and server actions: throws 403 if missing
-
-`auth.ts` provides:
-
-* `getServerUser(req)` — returns authenticated user (session)
-* `requireAuth()` — throws 401 if not signed in
-
-Also create `logAction(actor, action, entityType, entityId, meta)` to write AuditLog entries.
-
----
-
-# Detailed development plan (milestones with explicit steps & commit messages)
-
-Below is the full step-by-step development plan. Each milestone is a focused development task — implement, test, commit and push. Use the exact commit message shown.
-
----
-
-## Milestone 0 — Pre-flight & repo bootstrap
-
-**What**
-
-* Initialize Next.js app (TS), Tailwind, ShadCN, pnpm workspace
-* Setup MongoDB local or Atlas
-* Add ESLint, Prettier, husky
-  **Commands**
-
-```bash
-pnpm create next-app@latest ledgerfy --ts --app
-cd ledgerfy
-pnpm add -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
-
-**Commit**
-
-```
-chore: bootstrap Next.js app, tailwind and linting configs
-```
-
----
-
-## Milestone 1 — DB + Auth + User model
-
-**What**
-
-* Add `/lib/db.ts` (mongoose connect)
-* Implement NextAuth (or custom JWT). For speed use NextAuth with Credentials provider + email invite flow.
-* Create `User` and `Firm` models.
-* Seed admin user script.
-  **Files**
-* `/lib/db.ts`
-* `/models/User.ts`, `/models/Firm.ts`
-* `/app/api/auth/[...nextauth]/route.ts` or `/app/api/auth/*` routes
-  **Commit**
-
-```
-feat(auth): add DB connection, nextauth and user/firm models
-```
-
-**Tests**
-
-* Unit test for DB connect
-* E2E: sign-up flow and admin creation
-  **Acceptance**
-* Able to create firm and admin user; `GET /api/users/me` returns role
-
----
-
-## Milestone 2 — Roles & Permissions core
-
-**What**
-
-* Add `Role` model
-* Add `/lib/rbac.ts` helper
-* Create middleware `requirePermission` for server routes
-* Seed default roles (admin, manager, senior, associate, client) with sensible permissions
-  **Files**
-* `/models/Role.ts`
-* `/lib/rbac.ts`
-* `/app/api/roles/*` endpoints
-  **Commit**
-
-```
-feat(rbac): add role model, rbac helper and seeded default roles
-```
-
-**Tests**
-
-* Unit tests for permission checks
-* Protected API sample: create an endpoint `POST /api/test/protected` require `projects:create`, assert 403 for non-permitted
-  **Acceptance**
-* Admin can view role list; non-admin cannot create a role
-
----
-
-## Milestone 3 — User invite & management UI
-
-**What**
-
-* Invite flow API: `POST /api/auth/invite` -> sends invite email with token
-* Accept invite API: `POST /api/auth/accept-invite`
-* Admin UI: `/app/settings/users/page.tsx` — list, invite, edit role, deactivate
-* Ensure audit log on invites & role changes
-  **Files**
-* `/app/settings/users/page.tsx`
-* `/app/api/auth/invite/route.ts`
-* `/scripts/seedInvite.ts`
-  **Commit**
-
-```
-feat(users): add invite flow and user management UI
-```
-
-**Tests**
-
-* Invite token expiry; invited user can accept and create password
-  **Acceptance**
-* Admin invites user; invitee sets password and belongs to firm with assigned role
-
----
-
-## Milestone 4 — Role builder (custom roles)
-
-**What**
-
-* UI to create custom role by checking permission grid
-* Backend endpoint to persist role `POST /api/roles`
-* Prevent creation of roles granting `users:delete` unless creator is `admin`
-  **Files**
-* `/app/settings/roles/page.tsx`
-* `/app/api/roles/route.ts`
-  **Commit**
-
-```
-feat(roles): add custom role builder UI and endpoints
-```
-
-**Tests**
-
-* UI form validation; role creation and listing
-  **Acceptance**
-* Admin creates a role `audit-reviewer` with specific permission set
-
----
-
-## Milestone 5 — Middleware coverage & firm scoping
-
-**What**
-
-* Add RBAC middleware to all API routes; enforce `firmId` scoping
-* Global server action wrapper: `withAuthAndScope(handler)`
-* Audit log write for each protected action
-  **Files**
-* `/lib/middleware.ts`
-* Update all existing API route handlers to use middleware
-  **Commit**
-
-```
-chore(security): enforce rbac middleware and firm scoping for APIs
-```
-
-**Tests**
-
-* Attempt cross-firm data access -> assert forbidden
-  **Acceptance**
-* User from Firm A cannot access Firm B data
-
----
-
-## Milestone 6 — Document Drive + permissions
-
-**What**
-
-* Implement file upload (Supabase/S3 presigned), metadata Document model
-* Document permissions: share to role/user, expiry, watermark option
-* UI: Drive list, upload modal, share modal (pick users/roles)
-  **Files**
-* `/models/Document.ts`
-* `/app/dms/*` pages and components
-* `/app/api/documents/*` endpoints with permission checks
-  **Commit**
-
-```
-feat(dms): document drive with upload, metadata and share permissions
-```
-
-**Tests**
-
-* Upload -> ensure only permitted users can download
-  **Acceptance**
-* Associate uploads a doc; partner can download; client cannot unless shared
-
----
-
-## Milestone 7 — Projects & task engine with RBAC
-
-**What**
-
-* Project & Task models, APIs
-* Task permission rules:
-
-  * `tasks:assign` required to assign someone
-  * `tasks:update_status` required to change status for tasks not assigned to you
-* UI: Kanban with inline permission-based actions
-  **Commit**
-
-```
-feat(tasks): implement project/task engine with permission checks
-```
-
-**Tests**
-
-* User lacking `tasks:assign` cannot assign; user with `tasks:update_status` can close tasks
-  **Acceptance**
-* Manager assigns tasks; associate completes them
-
----
-
-## Milestone 8 — Compliance module integration
-
-**What**
-
-* ComplianceItem model & endpoints
-* Only users with `compliance:write` can mark filed
-* Calendar view and reminder worker
-  **Commit**
-
-```
-feat(compliance): add compliance items, calendar and reminder worker
-```
-
-**Tests**
-
-* Reminder jobs created; user assigned receives notification
-  **Acceptance**
-* Compliance item transitions to `Ready for Review` when tasks done
-
----
-
-## Milestone 9 — Ledger / Tally import with RBAC
-
-**What**
-
-* Tally import endpoint restricted to `tally:import` or `ledger:write`
-* Parsed ledger entries stored; only users with `ledger:read`/`ledger:write` can view/edit
-  **Commit**
-
-```
-feat(ledger): add tally CSV/XML import and ledger permissions
-```
-
-**Tests**
-
-* Import parser test; verify role-based view control
-  **Acceptance**
-* Partner imports Tally CSV; staff with ledger read sees entries
-
----
-
-## Milestone 10 — Audit logs & admin reports
-
-**What**
-
-* Admin pages to read/export AuditLog
-* Filters by user, action, date range
-* Add retention policy & export to CSV
-  **Commit**
-
-```
-feat(audit): add audit log viewer and export capability
-```
-
-**Tests**
-
-* Audit entries recorded for invites, role changes, document deletes
-  **Acceptance**
-* Admin exports audit logs for a month
-
----
-
-## Milestone 11 — MFA, security polish & tests
-
-**What**
-
-* Add TOTP (authenticator) setup for users; enforce per-firm if required
-* Rate limiting & brute-force protection on auth endpoints
-* Pentest checklist, add CORS and CSP headers
-  **Commit**
-
-```
-chore(security): add mfa, rate limiting and security headers
-```
-
-**Tests**
-
-* MFA setup/verify flow; brute-force protection tested
-  **Acceptance**
-* Admin enforces MFA; user must use TOTP
-
----
-
-## Milestone 12 — CI/CD, docs & deployment
-
-**What**
-
-* GitHub Actions: lint, test, build
-* Deploy to Vercel (app) and MongoDB Atlas
-* Docs: README, OPS, API spec, RBAC guide
-  **Commit**
-
-```
-ci: add CI pipeline, docs and staging deploy
-```
-
-**Acceptance**
-
-* PR triggers CI; staging site accessible with demo data
-
----
-
-# Testing strategy (RBAC-focused)
-
-* Unit tests: rbac helper, permission checks, role CRUD
-* Integration tests: invite -> accept -> permission enforced flows
-* E2E: simulate admin invites, client upload, permissioned download
-* Coverage target 80% for security-critical modules
-
----
-
-# Example server-side permission wrapper (pseudo-code)
+**Document.ts + FileVersion.ts**
 
 ```ts
-// FILE: /lib/rbac.ts
-export async function requirePermission(req, res, permission, handler) {
-  const user = await getServerUser(req);
-  if (!user) return res.status(401).send('Unauthorized');
-  const role = await Role.findById(user.roleId);
-  if (!role) return res.status(403).send('Forbidden');
-  if (!role.permissions.includes(permission)) return res.status(403).send('Forbidden');
-  await logAction(user._id, permission, 'API', req.path, { body: req.body });
-  return handler(req, res);
+const DocumentSchema = new mongoose.Schema({
+  firmId: { type: mongoose.Schema.Types.ObjectId, ref: "Firm", index: true },
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Client" },
+  name: String,
+  mimeType: String,
+  size: Number,
+  storageKey: String,             // current version key
+  linked: [{ type: {type:String}, refId: String }], // e.g., {type:"LedgerEntry",refId:"..."}
+  permissions: {                  // optional fine-grain doc-level permissions
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    roles: [String]
+  },
+  version: { type: Number, default: 1 },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: Date
+});
+export default mongoose.model("Document", DocumentSchema);
+
+const FileVersionSchema = new mongoose.Schema({
+  documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document", index: true },
+  version: Number,
+  storageKey: String,
+  size: Number,
+  checksum: String,
+  notes: String,
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  uploadedAt: { type: Date, default: Date.now }
+});
+export default mongoose.model("FileVersion", FileVersionSchema);
+```
+
+**LedgerEntry.ts**
+
+```ts
+const LedgerEntrySchema = new mongoose.Schema({
+  firmId: { type: mongoose.Schema.Types.ObjectId, ref: "Firm", index: true },
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Client", index: true },
+  date: Date,
+  account: String,
+  particulars: String,
+  debit: Number,
+  credit: Number,
+  balance: Number,
+  source: { type: String, enum: ["manual","tally","import"] },
+  flags: [{ type: String }], // e.g., "anomaly:amount_outlier"
+  linkedDocumentIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Document" }],
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  updatedAt: Date
+});
+export default mongoose.model("LedgerEntry", LedgerEntrySchema);
+```
+
+**ComplianceItem.ts**
+
+```ts
+const ComplianceItemSchema = new mongoose.Schema({
+  firmId: { type: mongoose.Schema.Types.ObjectId, ref: "Firm", index: true },
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Client", index: true },
+  type: { type: String, enum: ["GST","TDS","ITR","ROC","MCA","OTHER"] },
+  period: { fy: String, month: Number, quarter: String },
+  dueDate: Date,
+  status: { type: String, enum: ["todo","in_progress","ready_for_review","filed","overdue"], default:"todo" },
+  assigneeId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  docs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Document" }],
+  notes: String,
+  filedAt: Date,
+  filedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+});
+export default mongoose.model("ComplianceItem", ComplianceItemSchema);
+```
+
+(Other models: Firm, Client, Project, Task, TallySync, Notification — follow the same patterns.)
+
+---
+
+## 4) RBAC and permissions
+
+**Preset roles** (per firm, editable): `admin/partner`, `manager`, `senior`, `associate`, `client`.
+
+**Atomic permissions** (examples):
+
+* Org: `org:read`, `org:write`
+* Users: `users:invite`, `users:update`, `users:delete`
+* Clients: `clients:read`, `clients:write`
+* Projects: `projects:create`, `projects:update`, `projects:delete`
+* Tasks: `tasks:assign`, `tasks:update_status`, `tasks:timelog`
+* Docs: `documents:upload`, `documents:read`, `documents:download`, `documents:share`, `documents:delete`, `documents:restore_version`
+* Ledger: `ledger:read`, `ledger:write`, `tally:import`
+* Compliance: `compliance:read`, `compliance:write`, `compliance:mark_filed`
+* Analytics: `analytics:read`
+* Audit: `audit:read`
+
+**Enforcement:**
+
+* Server: wrap route handlers/server actions with `requirePermission("perm")`, apply firm scoping on every query.
+* Client: hide gated UI with `<RequirePermission perms={["..."]}>...</RequirePermission>` (never rely on UI only).
+
+**Custom roles:** Admins compose a role from permissions via a matrix. Guard escalations (only admin can grant `users:*`, `org:write`).
+
+**Audit trail:** Every sensitive action logs to `AuditLog` (actor, action, entity, firmId, ip, meta, timestamp). Export CSV.
+
+**MFA:** TOTP with enforced policy per firm.
+
+---
+
+## 5) APIs (high-level)
+
+Auth/Users:
+
+* `POST /api/auth/login`, `POST /api/auth/refresh`
+* `POST /api/auth/invite` (admin) → email/phone invite token
+* `POST /api/auth/accept-invite`
+* `GET /api/users/me`
+* `GET /api/users?firmId=...` (admin)
+* `POST /api/users` (admin)
+* `PATCH /api/users/:id` (admin) — change role/status
+* `DELETE /api/users/:id` (admin)
+
+Roles:
+
+* `GET /api/roles?firmId=...`
+* `POST /api/roles` (admin)
+* `PATCH /api/roles/:id` (admin)
+* `DELETE /api/roles/:id` (admin)
+
+Documents:
+
+* `POST /api/documents` (upload init → presigned URL)
+* `GET /api/documents?clientId=...`
+* `GET /api/documents/:id`
+* **Versioning:** `POST /api/documents/:id/version`, `GET /api/documents/:id/versions`, `POST /api/documents/:id/restore` (admin or `documents:restore_version`)
+* **Share:** `POST /api/documents/:id/share`
+
+Ledger:
+
+* `GET /api/ledger?clientId&account&dateFrom&dateTo`
+* `POST /api/ledger` (create/edit entries)
+* `POST /api/ledger/import/tally` (CSV/XML → queue job)
+* `GET /api/ledger/flags?clientId=...` (anomalies feed)
+
+Projects/Tasks:
+
+* `POST /api/projects`, `GET /api/projects?clientId=...`
+* `POST /api/tasks`, `PATCH /api/tasks/:id`, `POST /api/tasks/:id/assign`
+
+Compliance:
+
+* `GET /api/compliance?clientId=...`
+* `POST /api/compliance`
+* `PATCH /api/compliance/:id/status` (requires `compliance:write`)
+* `POST /api/compliance/:id/mark-filed` (requires `compliance:mark_filed`)
+
+Audit:
+
+* `GET /api/audit?firmId=...&entityType=...&actor=...&from&to` (admin)
+
+---
+
+## 6) Storage & versioning
+
+* Storage: S3/Supabase bucket per firm; objects named `firmId/clientId/documentId/version`.
+* On upload: create `FileVersion` record; bump `Document.version`; update `Document.storageKey`.
+* Rollback: check permission; set `Document.storageKey` to target version’s key; create new `FileVersion` with `notes="rollback to vX"`.
+
+---
+
+## 7) Workers (BullMQ)
+
+* `reminders.ts`: nightly cron, find due/overdue compliance, enqueue notifications (email/SMS/push).
+* `ocr.ts`: optional, extract text for search.
+* `tally-import.ts`: parse large CSV/XML, batch insert, compute balances, flag anomalies.
+
+---
+
+## 8) Tally integration (import path)
+
+* Accept **Tally exported** CSV/XML/Excel. Map to `LedgerEntry` fields with account mapping table per client.
+* Validate: dates, amounts, debit/credit integrity, running balance.
+* Flag: outliers (z-score), duplicates (same date/amount/particulars), missing counterpart.
+* Attach import report (`TallySync` with stats: rows processed, skipped, errors).
+
+---
+
+## 9) Client portal (localization)
+
+* **Audience:** clients upload docs, see status, sign off.
+* **Localization:** Hindi + regional (phase). Use next-intl/i18next; keep UI terse. Use number/date locales.
+* **Auth:** Client users linked to `clientId`. Scope all queries by `firmId + clientId`.
+* **Views:** Overview (status cards), Tasks (requested by CA), Documents (upload with guidelines), Messages/Comments.
+
+---
+
+## 10) Security
+
+* Password hashing (argon2), session hardening, rate limiting on auth.
+* MFA TOTP. Device/session list with revoke.
+* Signed URLs for downloads; optional watermarking. Virus scan hook (future).
+* CSP, CORS, secure cookies, HTTPS only.
+
+---
+
+## 11) Testing
+
+* **Unit:** rbac helpers, scope guards, parsers.
+* **Integration:** invite→accept→role enforce; document versioning; ledger import.
+* **E2E:** Playwright flows: client portal upload; manager assigns task; admin exports audit logs.
+* **Coverage target:** 80% on security-critical libs (`rbac`, `scope`, `audit`).
+
+---
+
+## 12) Development milestones (commit & push messages)
+
+**M0 — Bootstrap**
+
+* Next.js (TS, App Router), Tailwind, shadcn/ui, ESLint/Prettier, Husky.
+* `db.ts` Mongo connect.
+* **Commit:** `chore: bootstrap app with Next.js, Tailwind, linting`
+
+**M1 — Auth + base models**
+
+* NextAuth (Credentials) or Supabase Auth; User, Firm; `/api/users/me`.
+* Seed script for first admin.
+* **Commit:** `feat(auth): add auth and user/firm models`
+
+**M2 — RBAC core**
+
+* Role model, seed default roles, `lib/rbac.ts`, `requirePermission`.
+* Sample protected route.
+* **Commit:** `feat(rbac): roles, permission helper, protected route`
+
+**M3 — User management**
+
+* `/settings/users` table; invite flow; accept-invite; audit log on changes.
+* **Commit:** `feat(users): invite & management UI + audit logs`
+
+**M4 — Custom role builder**
+
+* `/settings/roles` with permission matrix; create/update/delete roles.
+* Guard escalation.
+* **Commit:** `feat(roles): custom role builder with guardrails`
+
+**M5 — Firm scoping + middleware sweep**
+
+* Wrap all APIs with auth+scope; add `withAuthAndScope`.
+* **Commit:** `chore(security): enforce firm scoping across APIs`
+
+**M6 — DMS (documents) with versioning**
+
+* Upload (presigned), Document + FileVersion schemas, list, preview, share.
+* Version history modal, restore with permission.
+* **Commit:** `feat(dms): documents with version history and restore`
+
+**M7 — Projects & tasks**
+
+* Project, Task models; Kanban board; assign/permissions; checklists.
+* **Commit:** `feat(tasks): projects and kanban with RBAC`
+
+**M8 — Compliance**
+
+* ComplianceItem CRUD, calendar/list, reminders worker, status gates.
+* **Commit:** `feat(compliance): items, calendar, reminders`
+
+**M9 — Ledger + Tally import**
+
+* Ledger entries table with inline edit, filters; Tally CSV/XML import + worker; anomaly flags.
+* **Commit:** `feat(ledger): entries, filters, tally import, anomaly flags`
+
+**M10 — Audit & reports**
+
+* Audit log view/export; filters by actor/action/date; retention setting.
+* **Commit:** `feat(audit): viewer and export`
+
+**M11 — MFA + hardening**
+
+* TOTP setup/verify, enforcement toggle; rate limit auth; CSP/CORS.
+* **Commit:** `chore(security): add MFA and security headers`
+
+**M12 — UI polish pack**
+
+* Global search/command palette; breadcrumbs; toasts; skeletons; empty states; notifications center.
+* **Commit:** `feat(ui): command palette, breadcrumbs, skeletons, notifications`
+
+**M13 — Client portal + i18n**
+
+* Client portal routes; localized strings; number/date locale; mobile responsiveness.
+* **Commit:** `feat(client-portal): localized client area with uploads and tasks`
+
+**M14 — CI/CD & docs**
+
+* GitHub Actions (lint,test,build); Vercel deploy; docs: ops, API, RBAC.
+* **Commit:** `ci: pipeline and deployment docs`
+
+---
+
+## 13) UI/UX blueprint (desktop-first, responsive)
+
+### Design principles
+
+* Clear hierarchy, whitespace, strong typography (Inter). Monospace for numbers in tables (JetBrains Mono).
+* Subtle motion that never blocks interaction. Keyboard-first ergonomics.
+
+### Theme tokens (Tailwind via CSS vars)
+
+```css
+:root{
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --border: 214.3 31.8% 91.4%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --destructive: 0 84.2% 60.2%;
+}
+.dark{
+  --background: 222 47% 11%;
+  --foreground: 0 0% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --border: 217.2 32.6% 17.5%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222 47% 11%;
 }
 ```
 
-Use this on routes:
+Use classes like `bg-[hsl(var(--background))] text-[hsl(var(--foreground))]`.
 
-```ts
-app.post('/api/projects', (req, res) => {
-  return requirePermission(req, res, 'projects:create', async () => {
-    // create project code
-  });
-});
+### Global layout
+
+* **Header:** left logo + breadcrumb, right: search/command `⌘K`, notifications, theme toggle, user avatar.
+* **Sidebar:** 280px; collapsible to icon rail (56px) with tooltips. Sections: Dashboard, Ledger, DMS, Projects, Compliance, Analytics, Settings.
+* **Page shell:** Title + breadcrumb, optional tabs/filters, content grid.
+
+### Components (Tailwind hints)
+
+* **Card:** `bg-white dark:bg-gray-800 shadow rounded-2xl p-5`
+* **Table:** `min-w-full divide-y divide-gray-200 dark:divide-gray-700` + sticky header + row hover
+* **Button primary:** `inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500`
+* **Drawer:** fixed panel from right `w-[520px]` with `transition-transform`
+* **Toast:** fixed bottom-right, `role="alert"`, success/warn/error variants
+* **Skeleton:** `animate-pulse bg-gray-200 dark:bg-gray-700 rounded`
+
+### Navigation
+
+* **Breadcrumbs:** Home › Section › Subsection › Page (last item not a link).
+* **Tabs:** Secondary nav within module (e.g., Ledger: Entries | Accounts | Imports).
+* **Command palette (`⌘K`):** jump to page/action; fuzzy search; shows shortcuts.
+
+### Micro-interactions
+
+* Inline edit: click pencil → input slides in; save (check) flashes green border; cancel restores text.
+* Row hover: elevate with subtle shadow; reveal quick actions (view, edit, history).
+* Empty states: helpful copy + primary action + mini-illustration.
+* Long operations: top progress bar + skeleton in panels; if >10s, show remaining estimation text.
+
+### Loading patterns
+
+* First paint: layout skeleton (cards, rows). Avoid spinner-only.
+* Lazy fetch for heavy panels (charts/tables) with independent skeletons.
+* Optimistic updates for task status, minor ledger edits; rollback if server rejects.
+
+### Accessibility & keyboard
+
+* Focus rings on all interactive elements (`focus-visible:ring-2 ring-indigo-500`).
+* Skip-to-content link in header.
+* Keyboard: `g d` dashboard, `g l` ledger, `g c` compliance; `e` edit row; `s` save; `Esc` cancel/close drawers.
+* ARIA: `aria-current="page"` on active breadcrumb; `aria-expanded` on collapsible; `role="dialog"` with focus-trap for modals.
+
+---
+
+## 14) Screens: content & behaviors
+
+### Dashboard
+
+* **Top KPIs (cards):** Receivables, Payables, Net Cash, Upcoming Compliance. Each with delta vs prior period and mini-sparkline.
+* **Charts:** Cashflow (line), Expense by category (donut), Revenue by client (bar). Hover tooltips; legend toggles.
+* **Activity feed:** recent uploads, filings, imports; click to deep-link.
+* **AI Insights (panel):** anomalies (e.g., duplicate payments), reminders (filings in 3 days), suggested tasks. “Explain” opens a drawer with rationale + links.
+
+**Interactions:** date range filter, client filter; cards animate number transitions; chart drill-down opens filtered views.
+
+### Ledger
+
+* **Entries table:** columns Date | Account | Particulars | Debit | Credit | Balance | Flags | Docs.
+* **Filters panel:** date range, account(s), amount range, flags.
+* **Inline edit:** Particulars, Debit/Credit. Save per row; mark dirty rows.
+* **Attach docs:** drop zone in Docs cell; badge shows count; click opens file drawer.
+* **Flags:** colored chips (e.g., “Outlier”); hover explains; click filters to similar.
+* **Imports:** import page → upload Tally CSV/XML → parse preview table → map accounts → run → progress modal → report.
+
+### DMS (WorkDrive+)
+
+* **List/grid:** Name, Type, Size, Modified, Version.
+* **Actions:** Upload, New folder, Share, Link to (Ledger/Compliance/Project).
+* **Preview:** side drawer previews PDFs/images/text; quick annotate (note pins).
+* **Version history:** timeline modal: v1..vN with uploader, timestamp, notes, checksum; diff view for text; restore (permissioned); download any version.
+* **Sharing:** to users/roles; expiry; watermark toggle; disable download (view-only).
+
+### Projects & Tasks
+
+* **Kanban:** Backlog | In Progress | Review | Done. Cards: title, assignee avatars, due date chip, labels, checklist progress.
+* **Task drawer:** description (markdown), checklist, attachments, comments, audit trail.
+* **Bulk ops:** multi-select with sticky action bar (assign, move, labels).
+
+### Compliance
+
+* **Calendar:** month/quarter view; colored dots by status; hover shows mini card.
+* **List:** sortable by due date, status, client; quick actions (assign, mark ready, mark filed).
+* **Item drawer:** required docs, linked tasks, status timeline; upload area with required placeholders (e.g., “GSTR-3B PDF”).
+* **Reminders:** worker creates notifications to assignee and client (if configured).
+
+### Analytics
+
+* **Reports:** GST liability, AR aging, Expense trends, Client profitability.
+* **Controls:** compare periods; export CSV/PDF; annotate points; what-if sliders on forecast.
+
+### Settings
+
+* **Organization:** firm profile, logo, locale defaults, fiscal year.
+* **Users:** table + invite; row expander for role, MFA status.
+* **Roles:** permission matrix; create/edit/delete custom roles; duplication and diff view vs preset.
+* **Integrations:** storage provider, email/SMS, webhooks; Tally templates.
+
+### Client Portal (responsive + localized)
+
+* **Overview:** status cards (filings), pending requests, recent documents.
+* **Tasks:** checklist of required actions; due dates; attach files.
+* **Documents:** upload with guidance; version list; comments thread with CA.
+* **Language switcher:** persistent; all dates/numbers localized; simpler copy; larger tap targets.
+
+---
+
+## 15) Extended Zoho/Tally parity (already integrated)
+
+* **File versioning:** immutable history, restore with permissions, notes & checksums.
+* **Full audit trail:** per action, filterable, exportable.
+* **Linking:** files ↔ ledger/compliance/projects; deep-links from all modules.
+* **Smart search:** filenames, version notes, OCR text (future), linked entities.
+
+Milestone deltas (if tracking):
+
+* `feat(dms): versioning APIs + UI`,
+* `feat(audit): middleware + admin viewer`,
+* `feat(search): global search across files and entities` (if building OCR later).
+
+---
+
+## 16) Performance notes
+
+* MongoDB: compound indexes on `{ firmId, clientId, date }`, `{ firmId, name }`, `{ documentId, version }`.
+* Pagination: cursor-based for large tables; avoid `skip` on huge collections.
+* Split routes: stream table rows; defer heavy panels with `Suspense`.
+* Static assets: image optimization; lazy-load previews.
+
+---
+
+## 17) Deployment
+
+* **Env:** `.env` for DB URI, JWT secret, S3 keys, Redis, EMAIL/SMS providers.
+* **CI:** lint → unit → integration → build.
+* **Staging seed:** demo firm with fake clients/docs; feature flags for demos.
+* **Backups:** nightly Mongo dumps; storage lifecycle rules (archival).
+
+---
+
+## 18) Acceptance criteria (snapshot)
+
+1. Users limited by firm; cross-firm access impossible via API/UI.
+2. RBAC blocks unauthorized actions server-side; UI hides gated controls.
+3. Document versioning with restore and complete audit entries.
+4. Ledger import parses Tally CSV/XML; produces report; flags anomalies.
+5. Compliance calendar and reminders working; status transitions logged.
+6. Client portal localized with scoped access to own client data.
+7. Command palette, breadcrumbs, skeletons, toasts, and dark mode implemented.
+
+---
+
+## 19) Quick Tailwind snippets (for Cursor to reuse)
+
+**Page shell**
+
+```tsx
+<div className="flex h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+  <aside className="w-72 shrink-0 border-r border-[hsl(var(--border))] hidden md:block">
+    {/* Sidebar */}
+  </aside>
+  <div className="flex-1 flex flex-col">
+    <header className="h-14 px-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
+      {/* Breadcrumbs, search, actions */}
+    </header>
+    <main className="flex-1 overflow-auto p-6">{/* Content */}</main>
+  </div>
+</div>
+```
+
+**Breadcrumbs**
+
+```tsx
+<nav aria-label="Breadcrumb">
+  <ol className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+    <li><a href="/" className="hover:underline">Home</a></li>
+    <li aria-hidden="true">›</li>
+    <li><a href="/ledger" className="hover:underline">Ledger</a></li>
+    <li aria-current="page" className="text-gray-900 dark:text-gray-100">Entries</li>
+  </ol>
+</nav>
+```
+
+**RequirePermission**
+
+```tsx
+export function RequirePermission({ perms, children }: { perms: string[]; children: React.ReactNode }) {
+  const user = useCurrentUser(); // from /lib/auth client hook
+  return perms.every(p => user.permissions.includes(p)) ? <>{children}</> : null;
+}
 ```
 
 ---
 
-# UX rules for RBAC UI
+## 20) Known bottlenecks & fallbacks
 
-* Every action button must be gated: hide or disable if permission missing. Prefer hide to reduce confusion.
-* Show tooltips like: “You don’t have permission to perform this action. Contact Admin.”
-* Admin role pages clearly state consequences: “Changing a role affects what users can access.”
-* Provide an audit trail link on sensitive actions (role changes, deletes).
-
----
-
-# Acceptance criteria (RBAC-specific)
-
-1. Admin can create/modify/delete roles and assign them to users.
-2. Users can perform only permitted actions; server rejects any unauthorized API request.
-3. Client portal users can only see their client data (strict firm+client scoping).
-4. Audit logs record every role/user change, document delete, or filing action.
-5. MFA enforcement works and prevents bypass.
+* **Govt data access:** If GSTN/MCA APIs aren’t available, use client-uploaded exports and guided checklists. Log limitation in `docs/ops.md`.
+* **Tally variance:** Different export schemas across versions; maintain mapping templates per client; allow admin override in import preview.
+* **Large files:** Use multipart uploads; background virus scan; preview generation worker.
 
 ---
 
-# Final notes & deliverables for Cursor
+## 21) Docs to include
 
-* Commit and push each milestone. Use the commit messages provided.
-* Include file header comment with full path for every newly created file.
-* If Cursor hits government API access blockers, implement the fallback (manual upload + worker parsing) and log the limitation in `docs/ops.md`.
-* Provide a `docs/rbac.md` describing roles/permissions and examples for clients to adopt.
-
-Got it. Here’s an **appendable section** for your `blueprint.md` that you can paste directly at the bottom. It introduces **Zoho/Tally-level enhancements** like **file version history, audit trails, and rollback**—so Ledgerfy is competitive without breaking the milestone flow.
+* `docs/rbac.md` — roles, permissions, examples.
+* `docs/api.md` — endpoint contracts + auth headers.
+* `docs/ops.md` — environments, keys, backups, limitations.
+* `docs/ui.md` — component catalog, patterns, accessibility checklists.
 
 ---
 
-## 🔄 Extended Core Features (Zoho/Tally Parity)
-
-To ensure Ledgerfy stands strong against Zoho Books and Tally, we’re extending the MVP with the following **enterprise-grade features**:
-
-### 1. File Version History
-
-* Every uploaded file (invoice, ledger report, compliance doc) will have **version tracking**.
-* Changes are not overwritten; instead, new versions are stored with timestamps, user ID, and change notes.
-* Users can **rollback** to any previous version.
-
-**Implementation Plan:**
-
-* Extend the `files` table in the database with `version`, `parent_file_id`, and `changed_by`.
-* Create a `FileHistory` service in `services/fileHistory.ts` to handle versioning logic.
-* Add UI in the file manager to show:
-
-  * Latest version (default)
-  * Dropdown to view/download/restore previous versions
-
-### 2. Audit Trail / Activity Log
-
-* Every user action (create, update, delete, upload, role change, permission grant) is logged.
-* Activity logs are immutable and viewable by Admins for compliance.
-
-**Implementation Plan:**
-
-* Add `audit_logs` table with fields: `id`, `action`, `user_id`, `entity_type`, `entity_id`, `timestamp`, `ip_address`.
-* Middleware in API routes automatically logs every sensitive action.
-* Admin dashboard screen for “System Logs” with filtering by user, date, or action type.
-
-### 3. Permission-Aware Rollbacks
-
-* Only **Admins or Role-based privileged users** can roll back to older versions.
-* Regular users can **view but not restore** previous versions.
-
-### 4. UX Additions for Trust & Clarity
-
-* Use **timeline visualization** for version history (like GitHub commits view).
-* Highlight changes with metadata: *“Edited by Ramesh on Aug 28, 2025 at 4:12 PM”*.
-* Add **diff view for text-based files (JSON, CSV, DOCX extracts)**.
-
----
-
-### 📦 Development Milestones (Extended)
-
-* **Commit 11:** Extend database schema (`files` table → add versioning, create `audit_logs` table).
-* **Commit 12:** Build `FileHistory` service with APIs (`POST /files/:id/version`, `GET /files/:id/history`, `POST /files/:id/restore`).
-* **Commit 13:** Integrate Audit Trail middleware across sensitive routes.
-* **Commit 14:** Update File Manager UI with **Version History modal**, rollback button, and user-friendly timeline.
-* **Commit 15:** Add Admin-only **System Logs Dashboard** with filtering and export-to-CSV.
-
----
+**Ship it.** .

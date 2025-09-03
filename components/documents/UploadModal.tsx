@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils'
 interface UploadModalProps {
   isOpen: boolean
   onClose: () => void
-  onUploadSuccess: () => void
+  onUploadSuccess: (document?: any) => void
 }
 
 interface UploadFormData {

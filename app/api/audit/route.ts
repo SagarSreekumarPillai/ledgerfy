@@ -122,9 +122,7 @@ export async function GET(req: NextRequest) {
       actionType: log.actionType,
       isComplianceAction: log.isComplianceAction,
       changes: log.changes || [],
-      metadata: log.meta || {},
-      formattedTimestamp: log.formattedTimestamp,
-      actionDescription: log.actionDescription
+      metadata: log.meta || {}
     }));
     
     // Get summary statistics
@@ -272,7 +270,9 @@ export async function POST(req: NextRequest) {
         log.entityType,
         log.entityId,
         log.entityName || '',
-        log.actorUserId ? `${log.actorUserId.firstName} ${log.actorUserId.lastName}` : '',
+        log.actorUserId && typeof log.actorUserId === 'object' && 'firstName' in log.actorUserId 
+          ? `${(log.actorUserId as any).firstName} ${(log.actorUserId as any).lastName}` 
+          : '',
         log.severity,
         log.actionType,
         log.ipAddress,

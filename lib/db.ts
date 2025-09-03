@@ -1,6 +1,14 @@
 // FILE: /lib/db.ts
 import mongoose from 'mongoose';
 
+// Extend global type to include mongoose
+declare global {
+  var mongoose: {
+    conn: any | null;
+    promise: Promise<any> | null;
+  } | undefined;
+}
+
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ledgerfy';
 
 if (!MONGODB_URI) {
@@ -14,6 +22,10 @@ if (!cached) {
 }
 
 async function dbConnect() {
+  if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+  }
+  
   if (cached.conn) {
     return cached.conn;
   }
@@ -23,8 +35,8 @@ async function dbConnect() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((connection) => {
+      return connection;
     });
   }
 

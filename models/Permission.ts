@@ -25,4 +25,4 @@ const PermissionSchema = new mongoose.Schema({
 // Index for efficient lookups
 PermissionSchema.index({ category: 1, name: 1 });
 
-export default mongoose.model('Permission', PermissionSchema);
+export default mongoose.models.Permission || mongoose.model('Permission', PermissionSchema);

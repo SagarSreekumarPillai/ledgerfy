@@ -26,6 +26,10 @@ export interface IAuditLog extends mongoose.Document {
   }[];
   severity: 'low' | 'medium' | 'high' | 'critical';
   isComplianceAction: boolean;
+  
+  // Methods
+  addChange(field: string, oldValue: any, newValue: any): Promise<IAuditLog>;
+  setSeverity(): Promise<IAuditLog>;
 }
 
 const AuditLogSchema = new mongoose.Schema<IAuditLog>({
@@ -172,4 +176,4 @@ AuditLogSchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.model<IAuditLog>('AuditLog', AuditLogSchema);
+export default mongoose.models.AuditLog || mongoose.model<IAuditLog>('AuditLog', AuditLogSchema);

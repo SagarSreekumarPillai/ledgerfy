@@ -1,60 +1,30 @@
 // FILE: /app/api/auth/logout/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser, logAction } from '../../../lib/rbac';
-import dbConnect from '../../../lib/db';
-import User from '../../../models/User';
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
+    // Create response
+    const response = NextResponse.json({ 
+      success: true, 
+      message: 'Logged out successfully' 
+    })
     
-    const user = await getServerUser(req);
+    // Clear cookies
+    response.cookies.delete('accessToken')
+    response.cookies.delete('refreshToken')
     
-    if (user) {
-      // Log the logout action
-      await logAction(
-        user._id.toString(),
-        'LOGOUT',
-        'AUTH',
-        'logout',
-        { ip: req.ip, userAgent: req.headers.get('user-agent') },
-        user.firmId.toString(),
-        req.ip,
-        req.headers.get('user-agent')
-      );
-    }
-    
-    // Clear the refresh token cookie
-    const response = NextResponse.json({
-      success: true,
-      message: 'Logged out successfully'
-    });
-    
-    response.cookies.set('refreshToken', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 0 // Expire immediately
-    });
-    
-    return response;
-    
+    return response
   } catch (error) {
-    console.error('Logout error:', error);
+    console.error('Logout error:', error)
     
-    // Even if there's an error, clear the cookie
-    const response = NextResponse.json({
-      success: true,
-      message: 'Logged out successfully'
-    });
+    // Even if there's an error, clear cookies
+    const response = NextResponse.json({ 
+      success: true, 
+      message: 'Logged out successfully' 
+    })
+    response.cookies.delete('accessToken')
+    response.cookies.delete('refreshToken')
     
-    response.cookies.set('refreshToken', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 0
-    });
-    
-    return response;
+    return response
   }
 }

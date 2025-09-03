@@ -17,7 +17,11 @@ import {
   X,
   ChevronRight,
   ChevronDown,
-  TestTube
+  TestTube,
+  Home,
+  Briefcase,
+  CreditCard,
+  TrendingUp
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -43,6 +47,8 @@ export function Sidebar({ sidebarOpen, setSidebarOpen, userPermissions = [] }: S
 
   const hasPermission = (permission?: string) => {
     if (!permission) return true
+    // Check if user has wildcard permission
+    if (userPermissions.includes('*')) return true
     return userPermissions.includes(permission)
   }
 
@@ -58,7 +64,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen, userPermissions = [] }: S
     {
       name: 'Dashboard',
       href: '/dashboard',
-      icon: BarChart3,
+      icon: Home,
       requiredPermission: 'dashboard:read'
     },
     {
@@ -88,7 +94,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen, userPermissions = [] }: S
     {
       name: 'Projects & Tasks',
       href: '/dashboard/projects',
-      icon: CheckSquare,
+      icon: Briefcase,
       requiredPermission: 'projects:read',
       children: [
         { name: 'Projects', href: '/dashboard/projects', icon: FolderOpen },
@@ -123,23 +129,12 @@ export function Sidebar({ sidebarOpen, setSidebarOpen, userPermissions = [] }: S
     {
       name: 'Analytics',
       href: '/dashboard/analytics',
-      icon: PieChart,
+      icon: TrendingUp,
       requiredPermission: 'analytics:read',
       children: [
         { name: 'Dashboard', href: '/dashboard/analytics', icon: PieChart },
         { name: 'Reports', href: '/dashboard/analytics/reports', icon: BarChart3, requiredPermission: 'analytics:read' },
         { name: 'Export', href: '/dashboard/analytics/export', icon: FileText, requiredPermission: 'analytics:export' }
-      ]
-    },
-    {
-      name: 'Testing',
-      href: '/dashboard/testing',
-      icon: TestTube,
-      requiredPermission: 'testing:read',
-      children: [
-        { name: 'Test Suite', href: '/dashboard/testing', icon: TestTube },
-        { name: 'System Health', href: '/dashboard/testing/health', icon: Shield, requiredPermission: 'testing:read' },
-        { name: 'Reports', href: '/dashboard/testing/reports', icon: FileText, requiredPermission: 'testing:read' }
       ]
     },
     {

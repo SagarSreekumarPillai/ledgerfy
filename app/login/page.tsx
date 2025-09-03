@@ -70,7 +70,7 @@ export default function LoginPage() {
     setIsSubmitting(true)
     
     try {
-      const success = await login('admin@defaultfirm.com', 'admin123')
+      const success = await login('admin@testfirm.com', 'admin123')
       if (!success) {
         return
       }
@@ -84,17 +84,10 @@ export default function LoginPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <Card className="w-96">
-          <CardHeader className="text-center">
-            <div className="mx-auto w-12 h-12 mb-4">
-              <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
-            </div>
-            <CardTitle>Loading...</CardTitle>
-            <CardDescription>
-              Please wait while we check your authentication status
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+        </div>
       </div>
     )
   }
@@ -256,7 +249,7 @@ export default function LoginPage() {
                   )}
                 </Button>
                 <p className="mt-2 text-xs text-center text-gray-500 dark:text-gray-400">
-                  Demo: admin@defaultfirm.com / admin123
+                  Demo: admin@testfirm.com / admin123
                 </p>
               </div>
             </div>

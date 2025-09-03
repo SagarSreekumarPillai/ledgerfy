@@ -55,6 +55,16 @@ export interface IDocument extends MongooseDocument {
   // Timestamps
   createdAt: Date
   updatedAt: Date
+  
+  // Methods
+  hasUserPermission(userId: string, permission: string): boolean
+  hasRolePermission(roleId: string, permission: string): boolean
+  addSharing(userId: string, roleId: string, permissions: string[], expiresAt?: Date): Promise<IDocument>
+  removeSharing(userId: string, roleId: string): Promise<IDocument>
+  createNewVersion(newFilePath: string, newFileName: string, changedBy: mongoose.Types.ObjectId, changeNotes?: string): Promise<IDocument>
+  getVersionHistory(): Promise<IDocument[]>
+  restoreToVersion(versionId: string, restoredBy: mongoose.Types.ObjectId): Promise<IDocument>
+  hasVersions(): boolean
 }
 
 const DocumentSchema = new Schema<IDocument>({
@@ -303,7 +313,7 @@ DocumentSchema.methods.hasUserPermission = function(userId: string, permission: 
   }
   
   // Check shared permissions
-  const sharedAccess = this.sharedWith.find(share => 
+  const sharedAccess = this.sharedWith.find((share: any) => 
     share.userId.toString() === userId
   )
   
@@ -317,7 +327,7 @@ DocumentSchema.methods.hasUserPermission = function(userId: string, permission: 
 // Method to check if role has permission
 DocumentSchema.methods.hasRolePermission = function(roleId: string, permission: string): boolean {
   // Check shared permissions by role
-  const sharedAccess = this.sharedWith.find(share => 
+  const sharedAccess = this.sharedWith.find((share: any) => 
     share.roleId.toString() === roleId
   )
   
@@ -330,7 +340,7 @@ DocumentSchema.methods.hasRolePermission = function(roleId: string, permission: 
 
 // Method to add sharing
 DocumentSchema.methods.addSharing = function(userId: string, roleId: string, permissions: string[], expiresAt?: Date) {
-  const existingShare = this.sharedWith.find(share => 
+  const existingShare = this.sharedWith.find((share: any) => 
     share.userId.toString() === userId && share.roleId.toString() === roleId
   )
   
@@ -353,7 +363,7 @@ DocumentSchema.methods.addSharing = function(userId: string, roleId: string, per
 
 // Method to remove sharing
 DocumentSchema.methods.removeSharing = function(userId: string, roleId: string) {
-  this.sharedWith = this.sharedWith.filter(share => 
+  this.sharedWith = this.sharedWith.filter((share: any) => 
     !(share.userId.toString() === userId && share.roleId.toString() === roleId)
   )
   
@@ -361,7 +371,7 @@ DocumentSchema.methods.removeSharing = function(userId: string, roleId: string) 
 }
 
 // Enhanced method to create new version (Blueprint requirement)
-DocumentSchema.methods.createNewVersion = function(
+DocumentSchema.methods.createNewVersion = async function(
   newFilePath: string, 
   newFileName: string, 
   changedBy: mongoose.Types.ObjectId, 
@@ -375,7 +385,7 @@ DocumentSchema.methods.createNewVersion = function(
   this.previousVersions.push(this._id)
   
   // Create new document with incremented version
-  const newDoc = new this.constructor({
+  const newDoc = new (this.constructor as any)({
     ...this.toObject(),
     _id: new mongoose.Types.ObjectId(),
     filePath: newFilePath,
@@ -395,10 +405,10 @@ DocumentSchema.methods.createNewVersion = function(
 
 // Method to get version history
 DocumentSchema.methods.getVersionHistory = async function() {
-  const Document = this.constructor
+  const DocumentModel = this.constructor as any
   
   // Get all versions of this document
-  const versions = await Document.find({
+  const versions = await DocumentModel.find({
     $or: [
       { _id: this._id },
       { parentFileId: this._id },
@@ -411,16 +421,16 @@ DocumentSchema.methods.getVersionHistory = async function() {
 
 // Method to restore to previous version
 DocumentSchema.methods.restoreToVersion = async function(versionId: string, restoredBy: mongoose.Types.ObjectId) {
-  const Document = this.constructor
+  const DocumentModel = this.constructor as any
   
   // Find the target version
-  const targetVersion = await Document.findById(versionId)
+  const targetVersion = await DocumentModel.findById(versionId)
   if (!targetVersion) {
     throw new Error('Version not found')
   }
   
   // Create new version from target
-  const restoredDoc = new Document({
+  const restoredDoc = new DocumentModel({
     ...targetVersion.toObject(),
     _id: new mongoose.Types.ObjectId(),
     version: this.version + 1,
@@ -456,4 +466,4 @@ DocumentSchema.pre('save', function(next) {
   next()
 })
 
-export default mongoose.model<IDocument>('Document', DocumentSchema)
+export default mongoose.models.Document || mongoose.model<IDocument>('Document', DocumentSchema)

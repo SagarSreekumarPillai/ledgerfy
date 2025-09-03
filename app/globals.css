@@ -51,6 +51,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-gray-900;
+    background-color: white;
+    color: #111827;
   }
 }

@@ -9,7 +9,6 @@ import {
   Globe, 
   HardDrive,
   Cpu,
-  Memory,
   Network,
   TrendingUp,
   TrendingDown,
@@ -492,7 +491,7 @@ export function PerformanceMonitor() {
             </Button>
             
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Memory className="h-5 w-5 text-green-600" />
+                              <HardDrive className="h-5 w-5 text-green-600" />
               <span className="font-medium">Memory Cleanup</span>
               <span className="text-xs text-gray-500">Clear memory cache and optimize</span>
             </Button>

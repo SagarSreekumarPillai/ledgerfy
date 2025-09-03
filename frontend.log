@@ -787,3 +787,111 @@ https://nextjs.org/docs/messages/module-not-found
 Import trace for requested module:
 ./components/layout/PageHeader.tsx
 ./app/dashboard/page.tsx
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+ ⨯ app/api/auth/refresh/route.ts
+Invariant: Expected to replace at least one import
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+ ⨯ ./components/layout/Breadcrumbs.tsx:5:1
+Module not found: Can't resolve 'next/link'
+  3 | import { usePathname } from 'next/navigation'
+  4 | import { ChevronRight, Home } from 'lucide-react'
+> 5 | import Link from 'next/link'
+    | ^
+  6 | import { cn } from '@/lib/utils'
+  7 |
+  8 | interface BreadcrumbItem {
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/PageHeader.tsx
+./app/dashboard/page.tsx
+[Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+ POST /api/auth/refresh 500 in 294ms
+ POST /api/auth/refresh 500 in 23ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+ POST /api/auth/refresh 500 in 35ms
+ POST /api/auth/refresh 500 in 12ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+ POST /api/auth/refresh 500 in 56ms
+ POST /api/auth/refresh 500 in 15ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+ POST /api/auth/refresh 500 in 35ms
+ POST /api/auth/refresh 500 in 10ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sagar/Git Projects/Ledgerfy/ledgerfy/.next/server/middleware-manifest.json'
+}
+[TypeError: Cannot read properties of undefined (reading 'ReactCurrentDispatcher')]
+ POST /api/auth/refresh 500 in 39ms
+ POST /api/auth/refresh 500 in 11ms
+[?25h

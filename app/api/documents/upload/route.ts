@@ -196,10 +196,10 @@ export async function POST(req: NextRequest) {
     
     // Enhanced audit logging using new middleware
     await logDocumentAction(
-      user.firmId,
-      user._id,
+      new mongoose.Types.ObjectId(user.firmId),
+      new mongoose.Types.ObjectId(user._id),
       'document_uploaded',
-      document._id.toString(),
+      (document._id as mongoose.Types.ObjectId).toString(),
       {
         fileName: document.fileName,
         fileSize: document.fileSize,
@@ -364,8 +364,8 @@ export async function GET(req: NextRequest) {
     
     // Log document access for audit
     await logDocumentAction(
-      user.firmId,
-      user._id,
+      new mongoose.Types.ObjectId(user.firmId),
+      new mongoose.Types.ObjectId(user._id),
       'documents_listed',
       'multiple',
       {

@@ -64,7 +64,7 @@ export default function UsersPage() {
       setUsers([
         {
           _id: '1',
-          email: 'admin@defaultfirm.com',
+          email: 'admin@testfirm.com',
           firstName: 'Admin',
           lastName: 'User',
           roleId: { _id: '1', name: 'admin', description: 'Full access to all features' },

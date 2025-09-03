@@ -1,9 +1,9 @@
 // FILE: /app/api/roles/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser, hasPermission, logAction } from '../../lib/rbac';
-import dbConnect from '../../lib/db';
-import Role from '../../models/Role';
-import Permission from '../../models/Permission';
+import { getServerUser, hasPermission, logAction } from '@/lib/rbac';
+import dbConnect from '@/lib/db';
+import Role from '@/models/Role';
+import Permission from '@/models/Permission';
 
 export async function GET(req: NextRequest) {
   try {
@@ -187,7 +187,7 @@ export async function POST(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({
@@ -308,7 +308,7 @@ export async function PUT(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({
@@ -379,7 +379,7 @@ export async function DELETE(req: NextRequest) {
     }
     
     // Check if role is assigned to any users
-    const User = (await import('../../models/User')).default;
+    const User = (await import('@/models/User')).default;
     const usersWithRole = await User.countDocuments({ 
       roleId: roleId,
       firmId: user.firmId 
@@ -407,7 +407,7 @@ export async function DELETE(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({

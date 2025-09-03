@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface User {
@@ -28,8 +28,7 @@ interface AuthContextType {
   error: string | null
   login: (email: string, password: string) => Promise<boolean>
   logout: () => Promise<void>
-  refreshToken: () => Promise<boolean>
-  updateUser: (updates: Partial<User>) => void
+  clearError: () => void
   hasPermission: (permission: string) => boolean
   hasAnyPermission: (permissions: string[]) => boolean
   hasAllPermissions: (permissions: string[]) => boolean
@@ -43,54 +42,26 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  // Check if user is authenticated on mount
+  // Check authentication status on mount
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/me')
+        if (response.ok) {
+          const data = await response.json()
+          setUser(data.user)
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error)
+      }
+    }
+
     checkAuth()
   }, [])
-
-  const checkAuth = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      
-      // Check if we have a stored token
-      const token = localStorage.getItem('accessToken')
-      if (!token) {
-        setLoading(false)
-        return
-      }
-
-      // Verify token and get user data
-      const response = await fetch('/api/users/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setUser(data.user)
-      } else {
-        // Token is invalid, try to refresh
-        const refreshed = await refreshToken()
-        if (!refreshed) {
-          // Refresh failed, clear everything and redirect to login
-          localStorage.removeItem('accessToken')
-          localStorage.removeItem('user')
-          router.push('/login')
-        }
-      }
-    } catch (err) {
-      console.error('Auth check failed:', err)
-      setError('Authentication check failed')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
@@ -107,12 +78,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (response.ok) {
         const data = await response.json()
-        
-        // Store token and user data
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('user', JSON.stringify(data.user))
-        
         setUser(data.user)
+        
+        // The server sets HTTP-only cookies, so we just need to redirect
         router.push('/dashboard')
         return true
       } else {
@@ -131,69 +99,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async (): Promise<void> => {
     try {
-      // Call logout API to invalidate refresh token
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-        }
-      })
-    } catch (err) {
-      console.error('Logout API error:', err)
-    } finally {
-      // Clear local storage and state
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('user')
+      setLoading(true)
+      
+      await fetch('/api/auth/logout', { method: 'POST' })
       setUser(null)
       router.push('/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const refreshToken = async (): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/auth/refresh', {
-        method: 'POST'
-      })
+  const clearError = () => setError(null)
 
-      if (response.ok) {
-        const data = await response.json()
-        
-        // Update stored token and user data
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('user', JSON.stringify(data.user))
-        
-        setUser(data.user)
-        return true
-      } else {
-        return false
-      }
-    } catch (err) {
-      console.error('Token refresh failed:', err)
-      return false
-    }
-  }
-
-  const updateUser = (updates: Partial<User>) => {
-    if (user) {
-      const updatedUser = { ...user, ...updates }
-      setUser(updatedUser)
-      localStorage.setItem('user', JSON.stringify(updatedUser))
-    }
-  }
-
+  // Permission checking functions
   const hasPermission = (permission: string): boolean => {
-    if (!user || !user.permissions) return false
-    return user.permissions.includes(permission)
+    return user?.permissions?.includes(permission) || false
   }
 
   const hasAnyPermission = (permissions: string[]): boolean => {
-    if (!user || !user.permissions) return false
-    return permissions.some(permission => user.permissions.includes(permission))
+    return user?.permissions?.some(permission => permissions.includes(permission)) || false
   }
 
   const hasAllPermissions = (permissions: string[]): boolean => {
-    if (!user || !user.permissions) return false
-    return permissions.every(permission => user.permissions.includes(permission))
+    return user?.permissions?.every(permission => permissions.includes(permission)) || false
   }
 
   const value: AuthContextType = {
@@ -202,8 +132,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     error,
     login,
     logout,
-    refreshToken,
-    updateUser,
+    clearError,
     hasPermission,
     hasAnyPermission,
     hasAllPermissions
@@ -223,3 +152,4 @@ export function useAuth(): AuthContextType {
   }
   return context
 }
+

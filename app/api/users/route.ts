@@ -1,9 +1,9 @@
 // FILE: /app/api/users/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser, hasPermission, logAction } from '../../lib/rbac';
-import dbConnect from '../../lib/db';
-import User from '../../models/User';
-import Role from '../../models/Role';
+import { getServerUser, hasPermission, logAction } from '@/lib/rbac';
+import dbConnect from '@/lib/db';
+import User from '@/models/User';
+import Role from '@/models/Role';
 
 export async function GET(req: NextRequest) {
   try {
@@ -174,7 +174,7 @@ export async function PUT(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({
@@ -273,7 +273,7 @@ export async function DELETE(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({

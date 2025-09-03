@@ -1,8 +1,8 @@
 // FILE: /app/api/users/me/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser, logAction } from '../../../../lib/rbac';
-import dbConnect from '../../../../lib/db';
-import User from '../../../../models/User';
+import { getServerUser, logAction } from '@/lib/rbac';
+import dbConnect from '@/lib/db';
+import User from '@/models/User';
 
 export async function GET(req: NextRequest) {
   try {
@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
         phone: fullUser.phone,
         firmId: fullUser.firmId,
         roleId: fullUser.roleId,
-        permissions: fullUser.roleId.permissions || [],
+        permissions: (fullUser.roleId as any).permissions || [],
         mfaEnabled: fullUser.mfaEnabled,
         isActive: fullUser.isActive,
         isEmailVerified: fullUser.isEmailVerified,
@@ -125,7 +125,7 @@ export async function PUT(req: NextRequest) {
       { firstName, lastName, phone, preferences },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({
@@ -138,7 +138,7 @@ export async function PUT(req: NextRequest) {
         phone: updatedUser.phone,
         firmId: updatedUser.firmId,
         roleId: updatedUser.roleId,
-        permissions: updatedUser.roleId.permissions || [],
+        permissions: (updatedUser.roleId as any).permissions || [],
         mfaEnabled: updatedUser.mfaEnabled,
         isActive: updatedUser.isActive,
         isEmailVerified: updatedUser.isEmailVerified,

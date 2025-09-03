@@ -3,6 +3,7 @@ import { getServerUser, hasPermission } from '@/lib/rbac'
 import { logDocumentAction } from '@/lib/auditMiddleware'
 import dbConnect from '@/lib/db'
 import Document from '@/models/Document'
+import mongoose from 'mongoose'
 import path from 'path'
 import fs from 'fs'
 
@@ -78,10 +79,10 @@ export async function GET(
     
     // Enhanced audit logging using new middleware
     await logDocumentAction(
-      user.firmId,
-      user._id,
+      new mongoose.Types.ObjectId(user.firmId),
+      new mongoose.Types.ObjectId(user._id),
       'document_downloaded',
-      document._id.toString(),
+      (document._id as mongoose.Types.ObjectId).toString(),
       {
         fileName: document.fileName,
         originalName: document.originalName,

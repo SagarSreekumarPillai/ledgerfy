@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import Document, { IDocument } from '../models/Document';
 import AuditLog from '../models/AuditLog';
 
+// Define DocumentModel for use in methods
+const DocumentModel = Document;
+
 export interface IFileVersion {
   _id: mongoose.Types.ObjectId;
   version: number;
@@ -67,7 +70,7 @@ class FileHistoryService implements IFileHistoryService {
     try {
       await session.withTransaction(async () => {
         // Find the current document
-        const currentDoc = await Document.findById(documentId).session(session);
+        const currentDoc = await DocumentModel.findById(documentId).session(session);
         if (!currentDoc) {
           throw new Error('Document not found');
         }
@@ -77,11 +80,11 @@ class FileHistoryService implements IFileHistoryService {
         await currentDoc.save({ session });
         
         // Add current version to previous versions
-        currentDoc.previousVersions.push(currentDoc._id);
+        currentDoc.previousVersions.push(currentDoc._id as any);
         await currentDoc.save({ session });
         
         // Create new document with incremented version
-        const newDoc = new Document({
+        const newDoc = new DocumentModel({
           ...currentDoc.toObject(),
           _id: new mongoose.Types.ObjectId(),
           filePath: newFilePath,
@@ -104,7 +107,7 @@ class FileHistoryService implements IFileHistoryService {
           currentDoc.firmId,
           changedBy,
           'Document',
-          newDoc._id.toString(),
+          (newDoc._id as any).toString(),
           {
             originalDocumentId: documentId,
             newVersion: newDoc.version,
@@ -116,7 +119,11 @@ class FileHistoryService implements IFileHistoryService {
       });
       
       // Return the new document
-      return await Document.findById(documentId).populate('changedBy', 'name email');
+      const result = await DocumentModel.findById(documentId).populate('changedBy', 'name email');
+      if (!result) {
+        throw new Error('Failed to retrieve new document');
+      }
+      return result;
     } finally {
       await session.endSession();
     }
@@ -126,13 +133,13 @@ class FileHistoryService implements IFileHistoryService {
    * Get version history of a document
    */
   async getVersionHistory(documentId: string): Promise<IFileVersion[]> {
-    const document = await Document.findById(documentId);
+    const document = await DocumentModel.findById(documentId);
     if (!document) {
       throw new Error('Document not found');
     }
     
     // Get all versions of this document
-    const versions = await Document.find({
+    const versions = await DocumentModel.find({
       $or: [
         { _id: document._id },
         { parentFileId: document._id },
@@ -144,7 +151,7 @@ class FileHistoryService implements IFileHistoryService {
     .select('_id version fileName originalName filePath fileSize mimeType fileExtension changedBy changeNotes createdAt isLatestVersion');
     
     return versions.map(doc => ({
-      _id: doc._id,
+      _id: doc._id as any,
       version: doc.version,
       fileName: doc.fileName,
       originalName: doc.originalName,
@@ -152,7 +159,7 @@ class FileHistoryService implements IFileHistoryService {
       fileSize: doc.fileSize,
       mimeType: doc.mimeType,
       fileExtension: doc.fileExtension,
-      changedBy: doc.changedBy,
+      changedBy: doc.changedBy || new mongoose.Types.ObjectId(),
       changeNotes: doc.changeNotes,
       createdAt: doc.createdAt,
       isLatestVersion: doc.isLatestVersion
@@ -172,13 +179,13 @@ class FileHistoryService implements IFileHistoryService {
     try {
       await session.withTransaction(async () => {
         // Find the current document
-        const currentDoc = await Document.findById(documentId).session(session);
+        const currentDoc = await DocumentModel.findById(documentId).session(session);
         if (!currentDoc) {
           throw new Error('Document not found');
         }
         
         // Find the target version
-        const targetVersion = await Document.findById(versionId).session(session);
+        const targetVersion = await DocumentModel.findById(versionId).session(session);
         if (!targetVersion) {
           throw new Error('Version not found');
         }
@@ -209,7 +216,7 @@ class FileHistoryService implements IFileHistoryService {
           currentDoc.firmId,
           restoredBy,
           'Document',
-          restoredDoc._id.toString(),
+          (restoredDoc._id as any).toString(),
           {
             originalDocumentId: documentId,
             restoredVersionId: versionId,
@@ -221,7 +228,11 @@ class FileHistoryService implements IFileHistoryService {
       });
       
       // Return the restored document
-      return await Document.findById(documentId).populate('changedBy', 'name email');
+      const restoredDoc = await DocumentModel.findById(documentId).populate('changedBy', 'name email');
+      if (!restoredDoc) {
+        throw new Error('Failed to retrieve restored document');
+      }
+      return restoredDoc;
     } finally {
       await session.endSession();
     }
@@ -240,13 +251,13 @@ class FileHistoryService implements IFileHistoryService {
     try {
       await session.withTransaction(async () => {
         // Find the document
-        const document = await Document.findById(documentId).session(session);
+        const document = await DocumentModel.findById(documentId).session(session);
         if (!document) {
           throw new Error('Document not found');
         }
         
         // Find the version to delete
-        const versionToDelete = await Document.findById(versionId).session(session);
+        const versionToDelete = await DocumentModel.findById(versionId).session(session);
         if (!versionToDelete) {
           throw new Error('Version not found');
         }
@@ -258,12 +269,12 @@ class FileHistoryService implements IFileHistoryService {
         
         // Remove from previous versions array
         document.previousVersions = document.previousVersions.filter(
-          id => !id.equals(versionToDelete._id)
+          (id: any) => !id.equals(versionToDelete._id as any)
         );
         await document.save({ session });
         
         // Delete the version
-        await Document.findByIdAndDelete(versionId).session(session);
+        await DocumentModel.findByIdAndDelete(versionId).session(session);
         
         // Log the action
         await this.logVersionAction(
@@ -291,7 +302,7 @@ class FileHistoryService implements IFileHistoryService {
    * Get the latest version of a document
    */
   async getLatestVersion(documentId: string): Promise<IDocument | null> {
-    const document = await Document.findById(documentId);
+    const document = await DocumentModel.findById(documentId);
     if (!document) {
       return null;
     }
@@ -302,7 +313,7 @@ class FileHistoryService implements IFileHistoryService {
     }
     
     // Find the latest version
-    return await Document.findOne({
+    return await DocumentModel.findOne({
       $or: [
         { parentFileId: document._id },
         { _id: { $in: document.previousVersions } }
@@ -319,8 +330,8 @@ class FileHistoryService implements IFileHistoryService {
     removed: string[];
     modified: string[];
   }> {
-    const version1 = await Document.findById(version1Id);
-    const version2 = await Document.findById(version2Id);
+    const version1 = await DocumentModel.findById(version1Id);
+    const version2 = await DocumentModel.findById(version2Id);
     
     if (!version1 || !version2) {
       throw new Error('One or both versions not found');

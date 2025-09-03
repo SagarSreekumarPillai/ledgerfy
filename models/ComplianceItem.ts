@@ -333,4 +333,4 @@ ComplianceItemSchema.pre('save', function(next) {
   next()
 })
 
-export default mongoose.model<IComplianceItem>('ComplianceItem', ComplianceItemSchema)
+export default mongoose.models.ComplianceItem || mongoose.model<IComplianceItem>('ComplianceItem', ComplianceItemSchema)

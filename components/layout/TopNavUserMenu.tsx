@@ -29,12 +29,18 @@ interface User {
   firstName: string
   lastName: string
   email: string
-  roleId: {
-    name: string
-    description: string
-  }
+  firmId: string
+  roleId: string
   mfaEnabled: boolean
   permissions: string[]
+  isActive: boolean
+  isEmailVerified: boolean
+  lastLogin: string
+  preferences: {
+    theme?: 'light' | 'dark' | 'system'
+    language?: string
+    timezone?: string
+  }
 }
 
 interface TopNavUserMenuProps {
@@ -190,12 +196,6 @@ export function TopNavUserMenu({
                 {user.email}
               </p>
               <div className="flex items-center space-x-2 mt-2">
-                <span className={cn(
-                  "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
-                  getRoleColor(user.roleId.name)
-                )}>
-                  {user.roleId.name}
-                </span>
                 {user.mfaEnabled && (
                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                     <Shield className="w-3 h-3 mr-1" />

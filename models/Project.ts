@@ -394,7 +394,7 @@ ProjectSchema.methods.addTeamMember = function(userId: string) {
 
 // Method to remove team member
 ProjectSchema.methods.removeTeamMember = function(userId: string) {
-  this.teamMembers = this.teamMembers.filter(id => id.toString() !== userId)
+  this.teamMembers = this.teamMembers.filter((id: any) => id.toString() !== userId)
   this.lastActivityAt = new Date()
   return this.save()
 }
@@ -470,4 +470,4 @@ ProjectSchema.pre('save', function(next) {
   next()
 })
 
-export default mongoose.model<IProject>('Project', ProjectSchema)
+export default mongoose.models.Project || mongoose.model<IProject>('Project', ProjectSchema)

@@ -1,8 +1,8 @@
 // FILE: /app/api/users/me/password/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser, logAction } from '../../../../lib/rbac';
-import dbConnect from '../../../../lib/db';
-import User from '../../../../models/User';
+import { getServerUser, logAction } from '@/lib/rbac';
+import dbConnect from '@/lib/db';
+import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 
 export async function PUT(req: NextRequest) {
@@ -73,7 +73,7 @@ export async function PUT(req: NextRequest) {
       { passwordChanged: true },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({

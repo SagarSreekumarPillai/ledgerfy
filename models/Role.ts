@@ -40,4 +40,4 @@ RoleSchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.model('Role', RoleSchema);
+export default mongoose.models.Role || mongoose.model('Role', RoleSchema);

@@ -560,7 +560,7 @@ ClientSchema.methods.addSecondaryContact = function(contact: {
 
 // Method to remove secondary contact
 ClientSchema.methods.removeSecondaryContact = function(email: string) {
-  this.secondaryContacts = this.secondaryContacts.filter(contact => contact.email !== email)
+  this.secondaryContacts = this.secondaryContacts.filter((contact: any) => contact.email !== email)
   return this.save()
 }
 
@@ -647,4 +647,4 @@ ClientSchema.pre('save', function(next) {
   next()
 })
 
-export default mongoose.model<IClient>('Client', ClientSchema)
+export default mongoose.models.Client || mongoose.model<IClient>('Client', ClientSchema)

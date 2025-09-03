@@ -1,8 +1,8 @@
 // FILE: /app/api/users/me/mfa/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser, logAction } from '../../../../lib/rbac';
-import dbConnect from '../../../../lib/db';
-import User from '../../../../models/User';
+import { getServerUser, logAction } from '@/lib/rbac';
+import dbConnect from '@/lib/db';
+import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 import { authenticator } from 'otplib';
 
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
         { mfaSetup: true },
         user.firmId.toString(),
         req.ip,
-        req.headers.get('user-agent')
+        req.headers.get('user-agent') || undefined
       );
       
       return NextResponse.json({
@@ -88,6 +88,13 @@ export async function POST(req: NextRequest) {
       }
       
       // Verify TOTP code
+      if (!fullUser.mfaSecret) {
+        return NextResponse.json(
+          { error: 'MFA secret not found' },
+          { status: 400 }
+        );
+      }
+      
       const isValidCode = authenticator.verify({
         token: code,
         secret: fullUser.mfaSecret
@@ -114,7 +121,7 @@ export async function POST(req: NextRequest) {
         { mfaEnabled: true },
         user.firmId.toString(),
         req.ip,
-        req.headers.get('user-agent')
+        req.headers.get('user-agent') || undefined
       );
       
       return NextResponse.json({
@@ -139,7 +146,7 @@ export async function POST(req: NextRequest) {
         { mfaEnabled: false },
         user.firmId.toString(),
         req.ip,
-        req.headers.get('user-agent')
+        req.headers.get('user-agent') || undefined
       );
       
       return NextResponse.json({
@@ -156,6 +163,13 @@ export async function POST(req: NextRequest) {
       }
       
       // Verify backup code
+      if (!fullUser.mfaBackupCodes) {
+        return NextResponse.json(
+          { error: 'MFA backup codes not found' },
+          { status: 400 }
+        );
+      }
+      
       const isValidBackupCode = fullUser.mfaBackupCodes.includes(backupCode);
       
       if (!isValidBackupCode) {
@@ -166,7 +180,7 @@ export async function POST(req: NextRequest) {
       }
       
       // Remove used backup code
-      fullUser.mfaBackupCodes = fullUser.mfaBackupCodes.filter(code => code !== backupCode);
+      fullUser.mfaBackupCodes = fullUser.mfaBackupCodes.filter((code: string) => code !== backupCode);
       fullUser.updatedAt = new Date();
       await fullUser.save();
       
@@ -179,7 +193,7 @@ export async function POST(req: NextRequest) {
         { backupCodeUsed: true },
         user.firmId.toString(),
         req.ip,
-        req.headers.get('user-agent')
+        req.headers.get('user-agent') || undefined
       );
       
       return NextResponse.json({

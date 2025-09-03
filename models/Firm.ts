@@ -1,85 +1,105 @@
 // FILE: /models/Firm.ts
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IFirm extends Document {
-  name: string;
-  type: 'CA' | 'CS' | 'CMA' | 'LAW' | 'OTHER';
+  name: string
+  legalName: string
+  registrationNumber: string
+  taxId: string
   address: {
-    street: string;
-    city: string;
-    state: string;
-    pincode: string;
-    country: string;
-  };
+    street: string
+    city: string
+    state: string
+    postalCode: string
+    country: string
+  }
   contact: {
-    email: string;
-    phone: string;
-    website?: string;
-  };
-  business: {
-    gstin?: string;
-    pan: string;
-    tan?: string;
-    cin?: string;
-    llpin?: string;
-  };
+    email: string
+    phone: string
+    website?: string
+  }
+  industry: string
+  size: 'small' | 'medium' | 'large' | 'enterprise'
+  subscription: {
+    plan: 'basic' | 'professional' | 'enterprise' | 'custom'
+    status: 'active' | 'suspended' | 'cancelled'
+    startDate: Date
+    endDate: Date
+    features: string[]
+  }
   settings: {
-    timezone: string;
-    currency: string;
-    dateFormat: string;
-    mfaRequired: boolean;
-    sessionTimeout: number; // in minutes
-    maxFileSize: number; // in MB
-    allowedFileTypes: string[];
-  };
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+    currency: string
+    timezone: string
+    language: string
+    dateFormat: string
+    numberFormat: string
+    fiscalYearStart: string
+    workingDays: number[]
+    workingHours: {
+      start: string
+      end: string
+    }
+  }
+  integrations: {
+    tally: boolean
+    zoho: boolean
+    quickbooks: boolean
+    xero: boolean
+    custom: string[]
+  }
+  isActive: boolean
+  createdBy?: mongoose.Types.ObjectId
+  updatedBy?: mongoose.Types.ObjectId
 }
 
-const FirmSchema = new Schema<IFirm>({
+const firmSchema = new Schema<IFirm>({
   name: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 100
+    maxlength: 200
   },
-  type: {
+  legalName: {
     type: String,
     required: true,
-    enum: ['CA', 'CS', 'CMA', 'LAW', 'OTHER'],
-    default: 'CA'
+    trim: true,
+    maxlength: 200
+  },
+  registrationNumber: {
+    type: String,
+    trim: true,
+    maxlength: 100
+  },
+  taxId: {
+    type: String,
+    trim: true,
+    maxlength: 100
   },
   address: {
     street: {
       type: String,
       required: true,
-      trim: true,
-      maxlength: 200
+      trim: true
     },
     city: {
       type: String,
       required: true,
-      trim: true,
-      maxlength: 50
+      trim: true
     },
     state: {
       type: String,
       required: true,
-      trim: true,
-      maxlength: 50
+      trim: true
     },
-    pincode: {
+    postalCode: {
       type: String,
       required: true,
-      trim: true,
-      maxlength: 10
+      trim: true
     },
     country: {
       type: String,
       required: true,
       trim: true,
-      maxlength: 50,
       default: 'India'
     }
   },
@@ -88,189 +108,128 @@ const FirmSchema = new Schema<IFirm>({
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
-      maxlength: 100
+      lowercase: true
     },
     phone: {
       type: String,
       required: true,
-      trim: true,
-      maxlength: 20
+      trim: true
     },
     website: {
       type: String,
-      trim: true,
-      maxlength: 200
+      trim: true
     }
   },
-  business: {
-    gstin: {
+  industry: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  size: {
+    type: String,
+    enum: ['small', 'medium', 'large', 'enterprise'],
+    default: 'medium'
+  },
+  subscription: {
+    plan: {
       type: String,
-      trim: true,
-      maxlength: 15,
-      validate: {
-        validator: function(v: string) {
-          if (!v) return true; // Optional
-          return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(v);
-        },
-        message: 'Invalid GSTIN format'
-      }
+      enum: ['basic', 'professional', 'enterprise', 'custom'],
+      default: 'basic'
     },
-    pan: {
+    status: {
       type: String,
-      required: true,
-      trim: true,
-      maxlength: 10,
-      validate: {
-        validator: function(v: string) {
-          return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(v);
-        },
-        message: 'Invalid PAN format'
-      }
+      enum: ['active', 'suspended', 'cancelled'],
+      default: 'active'
     },
-    tan: {
-      type: String,
-      trim: true,
-      maxlength: 10,
-      validate: {
-        validator: function(v: string) {
-          if (!v) return true; // Optional
-          return /^[A-Z]{4}[0-9]{5}[A-Z]{1}$/.test(v);
-        },
-        message: 'Invalid TAN format'
-      }
+    startDate: {
+      type: Date,
+      default: Date.now
     },
-    cin: {
-      type: String,
-      trim: true,
-      maxlength: 21,
-      validate: {
-        validator: function(v: string) {
-          if (!v) return true; // Optional
-          return /^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/.test(v);
-        },
-        message: 'Invalid CIN format'
-      }
+    endDate: {
+      type: Date,
+      required: true
     },
-    llpin: {
-      type: String,
-      trim: true,
-      maxlength: 7,
-      validate: {
-        validator: function(v: string) {
-          if (!v) return true; // Optional
-          return /^[A-Z]{3}-[0-9]{4}$/.test(v);
-        },
-        message: 'Invalid LLPIN format'
-      }
-    }
+    features: [String]
   },
   settings: {
-    timezone: {
-      type: String,
-      required: true,
-      default: 'Asia/Kolkata'
-    },
     currency: {
       type: String,
-      required: true,
       default: 'INR'
+    },
+    timezone: {
+      type: String,
+      default: 'Asia/Kolkata'
+    },
+    language: {
+      type: String,
+      default: 'en'
     },
     dateFormat: {
       type: String,
-      required: true,
       default: 'DD/MM/YYYY'
     },
-    mfaRequired: {
+    numberFormat: {
+      type: String,
+      default: 'Indian'
+    },
+    fiscalYearStart: {
+      type: String,
+      default: '01/04'
+    },
+    workingDays: {
+      type: [Number],
+      default: [1, 2, 3, 4, 5] // Monday to Friday
+    },
+    workingHours: {
+      start: {
+        type: String,
+        default: '09:00'
+      },
+      end: {
+        type: String,
+        default: '18:00'
+      }
+    }
+  },
+  integrations: {
+    tally: {
       type: Boolean,
       default: false
     },
-    sessionTimeout: {
-      type: Number,
-      default: 480, // 8 hours
-      min: 15,
-      max: 1440
+    zoho: {
+      type: Boolean,
+      default: false
     },
-    maxFileSize: {
-      type: Number,
-      default: 50, // 50 MB
-      min: 1,
-      max: 500
+    quickbooks: {
+      type: Boolean,
+      default: false
     },
-    allowedFileTypes: {
-      type: [String],
-      default: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png', 'txt']
-    }
+    xero: {
+      type: Boolean,
+      default: false
+    },
+    custom: [String]
   },
   isActive: {
     type: Boolean,
     default: true
+  },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  updatedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   timestamps: true
-});
+})
 
-// Indexes
-FirmSchema.index({ name: 1 }, { unique: true });
-FirmSchema.index({ 'contact.email': 1 });
-FirmSchema.index({ 'business.pan': 1 });
-FirmSchema.index({ 'business.gstin': 1 });
-FirmSchema.index({ isActive: 1 });
+// Indexes for performance
+firmSchema.index({ name: 1 })
+firmSchema.index({ 'contact.email': 1 })
+firmSchema.index({ isActive: 1 })
 
-// Virtual for full address
-FirmSchema.virtual('fullAddress').get(function() {
-  const addr = this.address;
-  return `${addr.street}, ${addr.city}, ${addr.state} ${addr.pincode}, ${addr.country}`;
-});
-
-// Virtual for business identifiers
-FirmSchema.virtual('businessIdentifiers').get(function() {
-  const identifiers = [];
-  if (this.business.gstin) identifiers.push(`GSTIN: ${this.business.gstin}`);
-  if (this.business.pan) identifiers.push(`PAN: ${this.business.pan}`);
-  if (this.business.tan) identifiers.push(`TAN: ${this.business.tan}`);
-  if (this.business.cin) identifiers.push(`CIN: ${this.business.cin}`);
-  if (this.business.llpin) identifiers.push(`LLPIN: ${this.business.llpin}`);
-  return identifiers;
-});
-
-// Method to validate business identifiers
-FirmSchema.methods.validateBusinessIdentifiers = function(): { isValid: boolean; errors: string[] } {
-  const errors: string[] = [];
-  
-  if (this.business.gstin && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(this.business.gstin)) {
-    errors.push('Invalid GSTIN format');
-  }
-  
-  if (this.business.pan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(this.business.pan)) {
-    errors.push('Invalid PAN format');
-  }
-  
-  if (this.business.tan && !/^[A-Z]{4}[0-9]{5}[A-Z]{1}$/.test(this.business.tan)) {
-    errors.push('Invalid TAN format');
-  }
-  
-  if (this.business.cin && !/^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/.test(this.business.cin)) {
-    errors.push('Invalid CIN format');
-  }
-  
-  if (this.business.llpin && !/^[A-Z]{3}-[0-9]{4}$/.test(this.business.llpin)) {
-    errors.push('Invalid LLPIN format');
-  }
-  
-  return {
-    isValid: errors.length === 0,
-    errors
-  };
-};
-
-// Pre-save middleware to validate business identifiers
-FirmSchema.pre('save', function(next) {
-  const validation = this.validateBusinessIdentifiers();
-  if (!validation.isValid) {
-    return next(new Error(`Business identifier validation failed: ${validation.errors.join(', ')}`));
-  }
-  next();
-});
-
-export default mongoose.model<IFirm>('Firm', FirmSchema);
+// Use Mongoose's built-in model caching
+export default mongoose.models.Firm || mongoose.model<IFirm>('Firm', firmSchema)

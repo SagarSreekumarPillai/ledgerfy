@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     )
     
     return NextResponse.json({

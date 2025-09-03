@@ -1,9 +1,9 @@
 // FILE: /app/api/users/invite/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerUser, hasPermission, logAction } from '../../../lib/rbac';
-import dbConnect from '../../../lib/db';
-import User from '../../../models/User';
-import Role from '../../../models/Role';
+import { getServerUser, hasPermission, logAction } from '@/lib/rbac';
+import dbConnect from '@/lib/db';
+import User from '@/models/User';
+import Role from '@/models/Role';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
 
@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     );
     
     return NextResponse.json({
@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
 
 async function sendInvitationEmail(email: string, firstName: string, tempPassword: string) {
   // Configure email transporter (you'll need to set up SMTP credentials)
-  const transporter = nodemailer.createTransporter({
+  const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '587'),
     secure: process.env.SMTP_SECURE === 'true',

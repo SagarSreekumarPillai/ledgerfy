@@ -18,7 +18,8 @@ import {
   Eye,
   Edit,
   Trash2,
-  UserPlus
+  UserPlus,
+  User
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'

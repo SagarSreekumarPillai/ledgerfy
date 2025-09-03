@@ -66,7 +66,7 @@ export default function DashboardLayout({
                 <div className="flex items-center gap-x-4 lg:gap-x-6">
                   <ThemeToggle />
                   <TopNavUserMenu
-                    user={user}
+                    user={user || undefined}
                     onLogout={handleLogout}
                     onMfaToggle={handleMfaToggle}
                     onProfileEdit={handleProfileEdit}

@@ -203,7 +203,7 @@ export async function PUT(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     )
     
     // In a real implementation, you would update the database here
@@ -285,7 +285,7 @@ export async function POST(req: NextRequest) {
       },
       user.firmId.toString(),
       req.ip,
-      req.headers.get('user-agent')
+      req.headers.get('user-agent') || undefined
     )
     
     return NextResponse.json({
