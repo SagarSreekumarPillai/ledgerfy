@@ -32,6 +32,7 @@ interface AuthContextType {
   hasPermission: (permission: string) => boolean
   hasAnyPermission: (permissions: string[]) => boolean
   hasAllPermissions: (permissions: string[]) => boolean
+  refreshUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -126,6 +127,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return user?.permissions?.every(permission => permissions.includes(permission)) || false
   }
 
+  const refreshUser = async () => {
+    try {
+      const response = await fetch('/api/auth/me')
+      if (response.ok) {
+        const data = await response.json()
+        setUser(data.user)
+      }
+    } catch (error) {
+      console.error('Failed to refresh user:', error)
+    }
+  }
+
   const value: AuthContextType = {
     user,
     loading,
@@ -135,7 +148,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     clearError,
     hasPermission,
     hasAnyPermission,
-    hasAllPermissions
+    hasAllPermissions,
+    refreshUser
   }
 
   return (

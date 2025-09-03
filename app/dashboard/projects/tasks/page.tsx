@@ -509,13 +509,8 @@ export default function TasksPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <PageHeader
-        title="Tasks"
-        description="Manage and track all your project tasks with advanced filtering and multiple view modes"
-        breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
-          { label: 'Projects', href: '/dashboard/projects' },
-          { label: 'Tasks', href: '/dashboard/projects/tasks' }
-        ]}
+        title="Task Management"
+        description="Create, assign, and track tasks across all projects"
       >
         <div className="flex items-center space-x-3">
           <Button variant="outline" onClick={() => router.push('/dashboard/projects')}>

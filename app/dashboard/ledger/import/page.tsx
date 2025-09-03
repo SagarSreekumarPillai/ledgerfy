@@ -20,7 +20,8 @@ import {
   FileSpreadsheet,
   Link,
   Save,
-  Play
+  Play,
+  Circle
 } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -217,12 +218,7 @@ export default function TallyImportPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <PageHeader
         title="Tally Import"
-        description="Import and synchronize data from Tally Prime with advanced mapping and validation"
-        breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
-          { label: 'Ledger', href: '/dashboard/ledger' },
-          { label: 'Tally Import', href: '/dashboard/ledger/import' }
-        ]}
+        description="Import financial data from Tally ERP and other accounting software"
       >
         <div className="flex items-center space-x-3">
           <Button variant="outline" onClick={() => router.push('/dashboard/ledger')}>

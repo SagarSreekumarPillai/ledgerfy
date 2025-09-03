@@ -252,7 +252,7 @@ export default function AddNewClientPage() {
       setFormData(prev => ({
         ...prev,
         [section]: {
-          ...prev[section as keyof ClientForm],
+          ...(prev[section as keyof ClientForm] as any),
           [key]: value
         }
       }))
@@ -291,11 +291,6 @@ export default function AddNewClientPage() {
       <PageHeader
         title="Add New Client"
         description="Create a new client profile with comprehensive business and compliance information"
-        breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
-          { label: 'Clients', href: '/dashboard/clients' },
-          { label: 'Add New Client', href: '/dashboard/clients/new' }
-        ]}
       >
         <div className="flex items-center space-x-3">
           <Button variant="outline" onClick={() => router.push('/dashboard/clients')}>

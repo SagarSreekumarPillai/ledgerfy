@@ -72,6 +72,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.1",
+    "react-hotkeys-hook": "^5.1.0",
     "redis": "^4.6.13",
     "tailwind-merge": "^3.3.1",
     "twilio": "^5.8.2",

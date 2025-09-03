@@ -18,7 +18,7 @@ import {
   Share2,
   ChevronLeft,
   ChevronRight,
-  Today,
+  CalendarCheck,
   CalendarDays,
   FileText,
   Users,
@@ -270,11 +270,6 @@ export default function ComplianceCalendarPage() {
       <PageHeader
         title="Compliance Calendar"
         description="Track and manage all compliance deadlines and events in a calendar view"
-        breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
-          { label: 'Compliance', href: '/dashboard/compliance' },
-          { label: 'Calendar', href: '/dashboard/compliance/calendar' }
-        ]}
       >
         <div className="flex items-center space-x-3">
           <Button variant="outline" onClick={() => router.push('/dashboard/compliance')}>
@@ -452,7 +447,7 @@ export default function ComplianceCalendarPage() {
               </div>
               
               <Button variant="outline" size="sm" onClick={goToToday}>
-                <Today className="h-4 w-4 mr-2" />
+                <CalendarCheck className="h-4 w-4 mr-2" />
                 Today
               </Button>
             </div>

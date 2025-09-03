@@ -225,13 +225,8 @@ export default function DocumentUploadPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <PageHeader
-        title="Document Upload"
-        description="Upload, organize, and manage your documents with advanced metadata and security controls"
-        breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
-          { label: 'Documents', href: '/dashboard/documents' },
-          { label: 'Upload', href: '/dashboard/documents/upload' }
-        ]}
+        title="Upload Documents"
+        description="Upload and organize documents with metadata and version control"
       >
         <div className="flex items-center space-x-3">
           <Button variant="outline" onClick={() => router.push('/dashboard/documents')}>

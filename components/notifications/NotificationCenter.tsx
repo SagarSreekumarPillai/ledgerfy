@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   Bell, 
   X, 
@@ -42,6 +43,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [filter, setFilter] = useState<'all' | 'unread' | 'critical' | 'compliance'>('all')
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     if (isOpen) {
@@ -397,8 +399,8 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
                               variant="outline"
                               size="sm"
                               onClick={() => {
-                                // Navigate to action URL
-                                window.location.href = notification.actionUrl!
+                                // Navigate to action URL using Next.js router
+                                router.push(notification.actionUrl!)
                                 onClose()
                               }}
                             >

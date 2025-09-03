@@ -17,7 +17,7 @@ export function PageHeader({
   description, 
   children, 
   className,
-  showBreadcrumbs = true 
+  showBreadcrumbs = true
 }: PageHeaderProps) {
   return (
     <div className={cn("mb-6", className)}>
