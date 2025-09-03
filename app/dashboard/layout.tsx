@@ -26,7 +26,15 @@ export default function DashboardLayout({
   const router = useRouter()
 
   const handleLogout = async () => {
-    await logout()
+    try {
+      await logout()
+      // Force a hard refresh to ensure all state is cleared
+      window.location.href = '/login'
+    } catch (error) {
+      console.error('Logout failed:', error)
+      // Fallback: force redirect even if logout fails
+      window.location.href = '/login'
+    }
   }
 
   const handleMfaToggle = () => {
@@ -71,7 +79,7 @@ export default function DashboardLayout({
             sidebarCollapsed ? "lg:pl-16" : "lg:pl-64"
           )}>
             {/* Top navigation */}
-            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div className="flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
               <div className="flex items-center gap-x-3">
                 <Button
                   variant="ghost"
@@ -81,17 +89,6 @@ export default function DashboardLayout({
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
-                
-                {!sidebarCollapsed && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="hidden lg:flex"
-                    onClick={toggleSidebarCollapse}
-                  >
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                )}
               </div>
 
               <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
@@ -121,11 +118,6 @@ export default function DashboardLayout({
                   />
                 </div>
               </div>
-            </div>
-
-            {/* Breadcrumbs */}
-            <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 sm:px-6 lg:px-8">
-              <Breadcrumbs />
             </div>
 
             {/* Page content */}

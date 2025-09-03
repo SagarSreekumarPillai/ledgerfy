@@ -19,7 +19,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { AdvancedStats } from '@/components/dashboard/AdvancedStats'
-import { NotificationCenter } from '@/components/notifications/NotificationCenter'
+
 import { useAuth } from '@/lib/auth-context'
 import { cn } from '@/lib/utils'
 
@@ -60,7 +60,6 @@ export default function DashboardPage() {
   const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([])
   const [upcomingDeadlines, setUpcomingDeadlines] = useState<UpcomingDeadline[]>([])
   const [loading, setLoading] = useState(true)
-  const [showNotifications, setShowNotifications] = useState(false)
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | '1y'>('30d')
 
   // Mock data - replace with actual API calls
@@ -245,22 +244,7 @@ export default function DashboardPage() {
               <option value="1y">Last year</option>
             </select>
             
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setShowNotifications(true)}
-              className="relative"
-            >
-              <Bell className="h-5 w-5" />
-              {stats && stats.overdueItems > 0 && (
-                <Badge 
-                  variant="destructive" 
-                  className="absolute -top-2 -right-2 h-5 w-5 p-0 text-xs"
-                >
-                  {stats.overdueItems}
-                </Badge>
-              )}
-            </Button>
+
           </div>
         </PageHeaderActions>
       </PageHeader>
@@ -478,11 +462,7 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Notification Center */}
-      <NotificationCenter 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
-      />
+
     </div>
   )
 }

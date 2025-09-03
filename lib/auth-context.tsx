@@ -102,11 +102,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true)
       
-      await fetch('/api/auth/logout', { method: 'POST' })
+      // Clear user state immediately
       setUser(null)
+      
+      // Call logout API
+      await fetch('/api/auth/logout', { method: 'POST' })
+      
+      // Force redirect to login page
       router.push('/login')
+      router.refresh()
     } catch (error) {
       console.error('Logout error:', error)
+      // Even if API call fails, ensure user is logged out locally
+      setUser(null)
+      router.push('/login')
+      router.refresh()
     } finally {
       setLoading(false)
     }
