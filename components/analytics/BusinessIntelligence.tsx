@@ -264,11 +264,11 @@ export function BusinessIntelligence() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high':
-        return 'text-red-600 dark:text-red-400'
+        return 'text-red-600 dark:text-red-400 dark:text-red-400'
       case 'medium':
         return 'text-yellow-600 dark:text-yellow-400'
       case 'low':
-        return 'text-green-600 dark:text-green-400'
+        return 'text-green-600 dark:text-green-400 dark:text-green-400'
       default:
         return 'text-gray-600 dark:text-gray-400'
     }
@@ -277,11 +277,11 @@ export function BusinessIntelligence() {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
-        return <TrendingUp className="h-4 w-4 text-green-600" />
+        return <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400 dark:text-green-400" />
       case 'down':
-        return <TrendingDown className="h-4 w-4 text-red-600" />
+        return <TrendingDown className="h-4 w-4 text-red-600 dark:text-red-400 dark:text-red-400" />
       default:
-        return <Target className="h-4 w-4 text-gray-600" />
+        return <Target className="h-4 w-4 text-gray-600 dark:text-gray-400" />
     }
   }
 
@@ -341,7 +341,7 @@ export function BusinessIntelligence() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" />
+              <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               <span>Business Intelligence</span>
             </div>
             <div className="flex items-center space-x-2">
@@ -429,8 +429,8 @@ export function BusinessIntelligence() {
                       {getTrendIcon(kpi.trend)}
                       <span className={cn(
                         "text-sm font-medium",
-                        kpi.trend === 'up' ? 'text-green-600' : 
-                        kpi.trend === 'down' ? 'text-red-600' : 'text-gray-600'
+                        kpi.trend === 'up' ? 'text-green-600 dark:text-green-400' : 
+                        kpi.trend === 'down' ? 'text-red-600 dark:text-red-400' : 'text-gray-600'
                       )}>
                         {kpi.change > 0 ? '+' : ''}{kpi.change}{kpi.unit}
                       </span>
@@ -478,10 +478,10 @@ export function BusinessIntelligence() {
               >
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0 mt-1">
-                    {insight.type === 'opportunity' && <CheckCircle className="h-5 w-5 text-green-600" />}
-                    {insight.type === 'risk' && <AlertTriangle className="h-5 w-5 text-red-600" />}
-                    {insight.type === 'trend' && <TrendingUp className="h-5 w-5 text-blue-600" />}
-                    {insight.type === 'anomaly' && <Clock className="h-5 w-5 text-orange-600" />}
+                    {insight.type === 'opportunity' && <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />}
+                    {insight.type === 'risk' && <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />}
+                    {insight.type === 'trend' && <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+                    {insight.type === 'anomaly' && <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />}
                   </div>
                   
                   <div className="flex-1 min-w-0">
@@ -569,7 +569,7 @@ export function BusinessIntelligence() {
                     
                     <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                       <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Forecast</div>
-                      <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                      <div className="text-lg font-bold text-blue-600 dark:text-blue-400 dark:text-blue-400">
                         {forecast.metric === 'Revenue' ? formatCurrency(forecast.forecast) : forecast.forecast}
                       </div>
                     </div>

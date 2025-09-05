@@ -43,7 +43,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true) // Start with loading true
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
@@ -51,13 +51,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        setLoading(true)
         const response = await fetch('/api/auth/me')
         if (response.ok) {
           const data = await response.json()
           setUser(data.user)
+        } else {
+          // If the response is not ok, clear user state
+          setUser(null)
         }
       } catch (error) {
         console.error('Auth check failed:', error)
+        setUser(null)
+      } finally {
+        setLoading(false)
       }
     }
 

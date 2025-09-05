@@ -80,10 +80,10 @@ export async function middleware(request: NextRequest) {
       
       return NextResponse.next()
     } catch (error) {
-      // Token is invalid, redirect to login
+      // Token is invalid, clear cookies and redirect to login
       const response = NextResponse.redirect(new URL('/login', request.url))
-      response.cookies.delete('accessToken')
-      response.cookies.delete('refreshToken')
+      response.cookies.set('accessToken', '', { expires: new Date(0) })
+      response.cookies.set('refreshToken', '', { expires: new Date(0) })
       return response
     }
   }

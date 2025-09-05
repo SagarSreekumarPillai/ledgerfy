@@ -75,7 +75,7 @@ export default function DashboardLayout({
 
           {/* Main content */}
           <div className={cn(
-            "transition-all duration-300 ease-in-out",
+            "transition-all duration-300 ease-in-out scrollbar-gutter-stable custom-scrollbar",
             sidebarCollapsed ? "lg:pl-16" : "lg:pl-64"
           )}>
             {/* Top navigation */}

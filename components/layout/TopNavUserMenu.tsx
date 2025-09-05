@@ -33,6 +33,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/lib/theme-context'
+import { useScrollbarLock } from '@/lib/useScrollbarLock'
 
 interface Notification {
   id: string
@@ -84,11 +85,15 @@ export function TopNavUserMenu({
   onSettings 
 }: TopNavUserMenuProps) {
   const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [filter, setFilter] = useState<'all' | 'unread' | 'critical' | 'compliance'>('all')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { resolvedTheme } = useTheme()
+  
+  // Prevent layout shift when dropdowns open
+  useScrollbarLock(notificationsOpen || userMenuOpen)
 
   useEffect(() => {
     if (notificationsOpen) {
@@ -492,7 +497,7 @@ export function TopNavUserMenu({
       <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
 
       {/* User Menu */}
-      <DropdownMenu>
+      <DropdownMenu open={userMenuOpen} onOpenChange={setUserMenuOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="flex items-center space-x-2 px-3 py-2">
             <Avatar className="h-8 w-8">

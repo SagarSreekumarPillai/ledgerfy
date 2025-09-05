@@ -142,10 +142,10 @@ export function SecurityDashboard() {
   }, [])
 
   const getSecurityScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600 dark:text-green-400'
+    if (score >= 90) return 'text-green-600 dark:text-green-400 dark:text-green-400'
     if (score >= 80) return 'text-yellow-600 dark:text-yellow-400'
-    if (score >= 70) return 'text-orange-600 dark:text-orange-400'
-    return 'text-red-600 dark:text-red-400'
+    if (score >= 70) return 'text-orange-600 dark:text-orange-400 dark:text-orange-400'
+    return 'text-red-600 dark:text-red-400 dark:text-red-400'
   }
 
   const getSecurityScoreBadge = (score: number) => {
@@ -168,19 +168,19 @@ export function SecurityDashboard() {
   const getEventTypeIcon = (type: string) => {
     switch (type) {
       case 'login':
-        return <Key className="h-4 w-4 text-blue-600" />
+        return <Key className="h-4 w-4 text-blue-600 dark:text-blue-400 dark:text-blue-400" />
       case 'logout':
-        return <Lock className="h-4 w-4 text-gray-600" />
+        return <Lock className="h-4 w-4 text-gray-600 dark:text-gray-400" />
       case 'permission_change':
-        return <Users className="h-4 w-4 text-purple-600" />
+        return <Users className="h-4 w-4 text-purple-600 dark:text-purple-400 dark:text-purple-400" />
       case 'data_access':
-        return <Eye className="h-4 w-4 text-green-600" />
+        return <Eye className="h-4 w-4 text-green-600 dark:text-green-400 dark:text-green-400" />
       case 'system_change':
-        return <Activity className="h-4 w-4 text-orange-600" />
+        return <Activity className="h-4 w-4 text-orange-600 dark:text-orange-400 dark:text-orange-400" />
       case 'security_alert':
-        return <AlertTriangle className="h-4 w-4 text-red-600" />
+        return <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400 dark:text-red-400" />
       default:
-        return <Activity className="h-4 w-4 text-gray-600" />
+        return <Activity className="h-4 w-4 text-gray-600 dark:text-gray-400" />
     }
   }
 
@@ -230,7 +230,7 @@ export function SecurityDashboard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Shield className="h-5 w-5 text-blue-600" />
+            <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             <span>Security Overview</span>
           </CardTitle>
           <CardDescription>
@@ -315,29 +315,29 @@ export function SecurityDashboard() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">GDPR</span>
                   {metrics.compliance.gdpr ? 
-                    <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                    <XCircle className="h-4 w-4 text-red-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> : 
+                    <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   }
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">SOX</span>
                   {metrics.compliance.sox ? 
-                    <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                    <XCircle className="h-4 w-4 text-red-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> : 
+                    <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   }
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">PCI DSS</span>
                   {metrics.compliance.pci ? 
-                    <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                    <XCircle className="h-4 w-4 text-red-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> : 
+                    <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   }
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">ISO 27001</span>
                   {metrics.compliance.iso27001 ? 
-                    <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                    <XCircle className="h-4 w-4 text-red-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> : 
+                    <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   }
                 </div>
               </div>
@@ -401,22 +401,22 @@ export function SecurityDashboard() {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 dark:text-gray-400">Backup Status</span>
                 {metrics.dataProtection.backupStatus ? 
-                  <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                  <XCircle className="h-4 w-4 text-red-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> : 
+                  <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                 }
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 dark:text-gray-400">Retention Policy</span>
                 {metrics.dataProtection.retentionPolicy ? 
-                  <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                  <XCircle className="h-4 w-4 text-red-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> : 
+                  <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                 }
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 dark:text-gray-400">Audit Logging</span>
                 {metrics.dataProtection.auditLogging ? 
-                  <CheckCircle className="h-4 w-4 text-green-600" /> : 
-                  <XCircle className="h-4 w-4 text-red-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" /> : 
+                  <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                 }
               </div>
             </div>
@@ -483,25 +483,25 @@ export function SecurityDashboard() {
         <CardContent>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Shield className="h-5 w-5 text-blue-600" />
+              <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               <span className="font-medium">Run Security Scan</span>
               <span className="text-xs text-gray-500">Scan for vulnerabilities</span>
             </Button>
             
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Users className="h-5 w-5 text-green-600" />
+              <Users className="h-5 w-5 text-green-600 dark:text-green-400" />
               <span className="font-medium">Review Access</span>
               <span className="text-xs text-gray-500">Audit user permissions</span>
             </Button>
             
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Lock className="h-5 w-5 text-purple-600" />
+              <Lock className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               <span className="font-medium">Update Policies</span>
               <span className="text-xs text-gray-500">Security policy review</span>
             </Button>
             
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Activity className="h-5 w-5 text-orange-600" />
+              <Activity className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span className="font-medium">Generate Report</span>
               <span className="text-xs text-gray-500">Security assessment</span>
             </Button>

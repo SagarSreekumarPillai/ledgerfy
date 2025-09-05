@@ -13,14 +13,28 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useAuth()
   const router = useRouter()
   const [isRedirecting, setIsRedirecting] = useState(false)
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false)
 
   useEffect(() => {
-    // Only redirect if we're not loading and have no user
-    if (!loading && !user && !isRedirecting) {
-      setIsRedirecting(true)
-      router.push('/login')
+    // Only redirect if we've finished checking auth and have no user
+    if (!loading && hasCheckedAuth && !user && !isRedirecting) {
+      // Add a small delay to prevent rapid redirects
+      const timer = setTimeout(() => {
+        setIsRedirecting(true)
+        // Use replace instead of push to avoid adding to history
+        router.replace('/login')
+      }, 100)
+
+      return () => clearTimeout(timer)
     }
-  }, [loading, user, router, isRedirecting])
+  }, [loading, user, router, isRedirecting, hasCheckedAuth])
+
+  useEffect(() => {
+    // Mark that we've checked auth once loading is complete
+    if (!loading) {
+      setHasCheckedAuth(true)
+    }
+  }, [loading])
 
   // Show loading state while checking auth
   if (loading) {

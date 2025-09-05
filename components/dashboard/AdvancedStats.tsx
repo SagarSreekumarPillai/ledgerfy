@@ -27,7 +27,7 @@ interface StatData {
   change: number
   changeType: 'increase' | 'decrease' | 'neutral'
   icon: React.ReactNode
-  color: string
+  color: 'green' | 'blue' | 'orange' | 'purple' | 'indigo'
 }
 
 export function AdvancedStats({ timeRange }: AdvancedStatsProps) {
@@ -43,48 +43,48 @@ export function AdvancedStats({ timeRange }: AdvancedStatsProps) {
           value: '₹2.4M',
           change: 12.5,
           changeType: 'increase',
-          icon: <TrendingUp className="h-4 w-4" />,
-          color: 'text-green-600'
+          icon: <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />,
+          color: 'green'
         },
         {
           label: 'Active Projects',
           value: '24',
           change: 8.2,
           changeType: 'increase',
-          icon: <BarChart3 className="h-4 w-4" />,
-          color: 'text-blue-600'
+          icon: <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />,
+          color: 'blue'
         },
         {
           label: 'Client Satisfaction',
           value: '94.2%',
           change: 2.1,
           changeType: 'increase',
-          icon: <CheckCircle className="h-4 w-4" />,
-          color: 'text-green-600'
+          icon: <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />,
+          color: 'green'
         },
         {
           label: 'Compliance Rate',
           value: '98.7%',
           change: 0.5,
           changeType: 'increase',
-          icon: <FileText className="h-4 w-4" />,
-          color: 'text-green-600'
+          icon: <FileText className="h-4 w-4 text-orange-600 dark:text-orange-400" />,
+          color: 'orange'
         },
         {
           label: 'Team Utilization',
           value: '87.3%',
           change: -3.2,
           changeType: 'decrease',
-          icon: <Users className="h-4 w-4" />,
-          color: 'text-orange-600'
+          icon: <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />,
+          color: 'purple'
         },
         {
           label: 'Average Response Time',
           value: '2.4h',
           change: -15.8,
           changeType: 'decrease',
-          icon: <Clock className="h-4 w-4" />,
-          color: 'text-green-600'
+          icon: <Clock className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />,
+          color: 'indigo'
         }
       ]
       
@@ -130,7 +130,14 @@ export function AdvancedStats({ timeRange }: AdvancedStatsProps) {
           <Card key={index} className="hover:shadow-md transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className={cn("p-2 rounded-lg", stat.color.replace('text-', 'bg-').replace('-600', '-100'))}>
+                <div className={cn(
+                  "p-2 rounded-lg",
+                  stat.color === 'green' && "bg-green-100 dark:bg-green-900",
+                  stat.color === 'blue' && "bg-blue-100 dark:bg-blue-900", 
+                  stat.color === 'orange' && "bg-orange-100 dark:bg-orange-900",
+                  stat.color === 'purple' && "bg-purple-100 dark:bg-purple-900",
+                  stat.color === 'indigo' && "bg-indigo-100 dark:bg-indigo-900"
+                )}>
                   {stat.icon}
                 </div>
                 <div className={cn(

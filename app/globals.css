@@ -59,6 +59,7 @@
     padding: 0;
     height: 100%;
     overflow-x: hidden;
+    scrollbar-gutter: stable;
   }
   
   body {
@@ -68,5 +69,116 @@
   
   #__next {
     height: 100%;
+  }
+}
+
+@layer utilities {
+  /* Prevent layout shift when scrollbar appears/disappears */
+  .scrollbar-gutter-stable {
+    scrollbar-gutter: stable;
+  }
+  
+  /* Force scrollbar to always be visible to prevent layout shift */
+  .scrollbar-always-visible {
+    overflow-y: scroll;
+  }
+  
+  /* Custom scrollbar styling for better UX */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    background: transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent !important;
+    border: none;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(107, 114, 128, 0.4);
+    border-radius: 2px;
+    border: none;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(107, 114, 128, 0.6);
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.4);
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.6);
+  }
+  
+  /* Global scrollbar styling for all elements */
+  ::-webkit-scrollbar {
+    width: 4px;
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent !important;
+    border: none;
+    box-shadow: none;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(107, 114, 128, 0.4);
+    border-radius: 2px;
+    border: none;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(107, 114, 128, 0.6);
+  }
+  
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.4);
+  }
+  
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.6);
+  }
+  
+  /* Additional scrollbar track styling to ensure transparency */
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  
+  /* Firefox scrollbar styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(107, 114, 128, 0.4) transparent;
+  }
+  
+  .dark * {
+    scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
+  }
+  
+  /* Additional overrides to ensure no white background */
+  html, body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(107, 114, 128, 0.4) transparent;
+  }
+  
+  .dark html, .dark body {
+    scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
+  }
+  
+  /* Force transparency on all scrollbar elements */
+  *::-webkit-scrollbar-track {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  *::-webkit-scrollbar {
+    background: transparent !important;
+  }
+  
+  *::-webkit-scrollbar-corner {
+    background: transparent !important;
   }
 }

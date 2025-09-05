@@ -130,8 +130,8 @@ export function PerformanceMonitor() {
 
   const getPerformanceColor = (value: number, thresholds: { warning: number; critical: number }) => {
     if (value >= thresholds.critical) return 'text-red-600 dark:text-red-400'
-    if (value >= thresholds.warning) return 'text-yellow-600 dark:text-yellow-400'
-    return 'text-green-600 dark:text-green-400'
+    if (value >= thresholds.warning) return 'text-yellow-600 dark:text-yellow-400 dark:text-yellow-400'
+    return 'text-green-600 dark:text-green-400 dark:text-green-400'
   }
 
   const getPerformanceBadge = (value: number, thresholds: { warning: number; critical: number }) => {
@@ -152,13 +152,13 @@ export function PerformanceMonitor() {
   const getAlertTypeIcon = (type: string) => {
     switch (type) {
       case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-yellow-600" />
+        return <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 dark:text-yellow-400" />
       case 'error':
-        return <AlertTriangle className="h-4 w-4 text-orange-600" />
+        return <AlertTriangle className="h-4 w-4 text-orange-600 dark:text-orange-400 dark:text-orange-400" />
       case 'critical':
-        return <AlertTriangle className="h-4 w-4 text-red-600" />
+        return <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
       default:
-        return <AlertTriangle className="h-4 w-4 text-gray-600" />
+        return <AlertTriangle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
     }
   }
 
@@ -200,7 +200,7 @@ export function PerformanceMonitor() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Activity className="h-5 w-5 text-blue-600" />
+              <Activity className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               <span>Performance Overview</span>
             </div>
             <div className="flex items-center space-x-2">
@@ -366,7 +366,7 @@ export function PerformanceMonitor() {
                 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">Uptime</span>
-                  <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                  <span className="text-sm font-medium text-green-600 dark:text-green-400 dark:text-green-400">
                     {metrics.application.uptime}%
                   </span>
                 </div>
@@ -401,12 +401,12 @@ export function PerformanceMonitor() {
                       fill="transparent"
                       strokeDasharray={`${2 * Math.PI * 32}`}
                       strokeDashoffset={`${2 * Math.PI * 32 * (1 - 85 / 100)}`}
-                      className="text-green-600"
+                      className="text-green-600 dark:text-green-400"
                       strokeLinecap="round"
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-xl font-bold text-green-600">85</span>
+                    <span className="text-xl font-bold text-green-600 dark:text-green-400">85</span>
                   </div>
                 </div>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Excellent</p>
@@ -430,7 +430,7 @@ export function PerformanceMonitor() {
         <CardContent>
           {alerts.length === 0 ? (
             <div className="text-center py-8">
-              <CheckCircle className="mx-auto h-12 w-12 text-green-600 mb-4" />
+              <CheckCircle className="mx-auto h-12 w-12 text-green-600 dark:text-green-400 mb-4" />
               <p className="text-gray-500 dark:text-gray-400">No active performance alerts</p>
             </div>
           ) : (
@@ -485,25 +485,25 @@ export function PerformanceMonitor() {
         <CardContent>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Cpu className="h-5 w-5 text-blue-600" />
+              <Cpu className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               <span className="font-medium">CPU Optimization</span>
               <span className="text-xs text-gray-500">Analyze and optimize CPU usage</span>
             </Button>
             
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-                              <HardDrive className="h-5 w-5 text-green-600" />
+                              <HardDrive className="h-5 w-5 text-green-600 dark:text-green-400" />
               <span className="font-medium">Memory Cleanup</span>
               <span className="text-xs text-gray-500">Clear memory cache and optimize</span>
             </Button>
             
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Database className="h-5 w-5 text-purple-600" />
+              <Database className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               <span className="font-medium">DB Optimization</span>
               <span className="text-xs text-gray-500">Optimize database queries</span>
             </Button>
             
             <Button variant="outline" className="h-auto p-4 flex-col items-start space-y-2">
-              <Activity className="h-5 w-5 text-orange-600" />
+              <Activity className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               <span className="font-medium">Performance Report</span>
               <span className="text-xs text-gray-500">Generate detailed report</span>
             </Button>
