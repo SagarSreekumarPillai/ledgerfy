@@ -51,17 +51,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log('🔍 Frontend auth check started')
         setLoading(true)
         const response = await fetch('/api/auth/me')
+        console.log('📊 Frontend auth check response status:', response.status)
+        
         if (response.ok) {
           const data = await response.json()
+          console.log('📊 Frontend auth check success, user:', data.user)
           setUser(data.user)
         } else {
+          console.log('❌ Frontend auth check failed, clearing user')
           // If the response is not ok, clear user state
           setUser(null)
         }
       } catch (error) {
-        console.error('Auth check failed:', error)
+        console.error('❌ Frontend auth check error:', error)
         setUser(null)
       } finally {
         setLoading(false)
@@ -73,6 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      console.log('🔍 Frontend login attempt started for:', email)
       setLoading(true)
       setError(null)
 
@@ -84,20 +90,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
         body: JSON.stringify({ email, password })
       })
 
+      console.log('📊 Frontend response status:', response.status)
+      console.log('📊 Frontend response ok:', response.ok)
+
       if (response.ok) {
         const data = await response.json()
+        console.log('📊 Frontend login success, user data:', data.user)
         setUser(data.user)
         
         // The server sets HTTP-only cookies, so we just need to redirect
+        console.log('🔄 Redirecting to dashboard...')
         router.push('/dashboard')
         return true
       } else {
         const errorData = await response.json()
+        console.log('❌ Frontend login failed:', errorData)
         setError(errorData.error || 'Login failed')
         return false
       }
     } catch (err) {
-      console.error('Login error:', err)
+      console.error('❌ Frontend login error:', err)
       setError('Network error during login')
       return false
     } finally {
