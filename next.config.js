@@ -3,13 +3,9 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://localhost:5001/api/:path*',
-      },
-    ];
+  // Remove rewrites for Vercel deployment - API routes are handled by Next.js
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose'],
   },
 };
 

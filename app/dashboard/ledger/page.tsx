@@ -13,7 +13,8 @@ import {
   Trash2,
   Calendar,
   DollarSign,
-  FileText
+  FileText,
+  CheckSquare
 } from 'lucide-react'
 import { PageHeader, PageHeaderActions } from '@/components/layout/PageHeader'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

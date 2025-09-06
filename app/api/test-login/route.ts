@@ -1,71 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
-import dbConnect from '@/lib/db'
-import User from '@/models/User'
+import { authenticateUser, generateTokens } from '@/lib/mockAuth'
+import { findRoleById } from '@/lib/mockData'
 
 export async function POST(req: NextRequest) {
   try {
-    console.log('🧪 Test login started')
+    console.log('🧪 Mock test login started')
     
     const { email, password } = await req.json()
     console.log('📧 Test login for:', email)
     
-    // Test database connection
-    await dbConnect()
-    console.log('✅ Database connected')
-    
-    // Test user lookup
-    const user = await User.findOne({ email }).populate('roleId')
+    // Test user lookup with mock data
+    const user = await authenticateUser(email, password)
     console.log('👤 User found:', user ? 'Yes' : 'No')
     
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      return NextResponse.json({ error: 'User not found or invalid credentials' }, { status: 404 })
     }
     
+    const role = findRoleById(user.roleId)
     console.log('👤 User details:', {
       id: user._id,
       email: user.email,
       firstName: user.firstName,
-      roleId: user.roleId?._id,
-      permissions: (user.roleId as any)?.permissions
+      roleId: user.roleId,
+      permissions: role?.permissions
     })
     
-    // Test password comparison
-    const isValidPassword = await bcrypt.compare(password, user.password)
-    console.log('🔐 Password valid:', isValidPassword)
-    
-    if (!isValidPassword) {
-      return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
-    }
+    console.log('🔐 Password valid, generating test token')
     
     // Test JWT signing
-    const testToken = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: '1h' }
-    )
+    const { accessToken } = generateTokens(user)
     console.log('🎫 JWT token created successfully')
     
     return NextResponse.json({
       success: true,
-      message: 'Test login successful',
+      message: 'Mock test login successful',
       user: {
         id: user._id,
         email: user.email,
         firstName: user.firstName,
-        permissions: (user.roleId as any)?.permissions || []
+        permissions: role?.permissions || []
       },
-      token: testToken
+      token: accessToken
     })
     
   } catch (error) {
-    console.error('❌ Test login error:', error)
+    console.error('❌ Mock test login error:', error)
     return NextResponse.json(
       { 
-        error: 'Test login failed', 
-        details: (error as Error).message,
-        stack: (error as Error).stack
+        error: 'Mock test login failed', 
+        details: (error as Error).message
       },
       { status: 500 }
     )

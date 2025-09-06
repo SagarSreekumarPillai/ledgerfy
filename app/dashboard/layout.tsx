@@ -26,6 +26,11 @@ export default function DashboardLayout({
   const { user, logout, loading } = useAuth()
   const router = useRouter()
 
+  // Debug logging
+  console.log('Dashboard Layout - loading:', loading)
+  console.log('Dashboard Layout - user:', user)
+  console.log('Dashboard Layout - userPermissions:', loading ? ['*'] : (user?.permissions || []))
+
   // Initialize sidebar state from localStorage on client side
   useEffect(() => {
     setIsClient(true)

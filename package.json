@@ -12,7 +12,9 @@
     "dev:full": "concurrently \"npm run server\" \"npm run dev\"",
     "db:seed": "node backend/seed/seed.js",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "deploy": "vercel",
+    "deploy:prod": "vercel --prod"
   },
   "repository": {
     "type": "git",

@@ -1,16 +1,11 @@
 // FILE: /app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
-import dbConnect from '@/lib/db'
-import { User } from '@/models'
+import { authenticateUser, generateTokens } from '@/lib/mockAuth'
+import { findRoleById } from '@/lib/mockData'
 
 export async function POST(req: NextRequest) {
   try {
-    console.log('🔍 Login attempt started')
-    
-    await dbConnect()
-    console.log('✅ Database connected')
+    console.log('🔍 Mock login attempt started')
     
     const { email, password } = await req.json()
     console.log('📧 Login attempt for:', email)
@@ -22,62 +17,26 @@ export async function POST(req: NextRequest) {
       )
     }
     
-    // Find user by email and populate role
-    const user = await User.findOne({ email }).populate('roleId')
+    // Authenticate user using mock data
+    const user = await authenticateUser(email, password)
     console.log('👤 User found:', user ? 'Yes' : 'No')
     
-    if (!user || !user.isActive) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       )
     }
     
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, user.password)
-    console.log('🔐 Password valid:', isValidPassword)
-    
-    if (!isValidPassword) {
-      console.log(`Failed login attempt for user ${user._id} from ${req.ip}`)
-      
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      )
-    }
-    
-    // Update last login
-    user.lastLogin = new Date()
-    await user.save()
-    console.log('✅ Last login updated')
+    // Get role permissions
+    const role = findRoleById(user.roleId)
+    console.log('🔐 Password valid, generating tokens')
     
     // Generate JWT tokens
-    const accessToken = jwt.sign(
-      { 
-        userId: user._id,
-        email: user.email,
-        firmId: user.firmId,
-        roleId: user.roleId._id
-      },
-      process.env.JWT_SECRET!,
-      { expiresIn: '15m' }
-    )
-
-    const refreshToken = jwt.sign(
-      { 
-        userId: user._id,
-        type: 'refresh'
-      },
-      process.env.JWT_REFRESH_SECRET!,
-      { expiresIn: '7d' }
-    )
-
-    // Store refresh token in user document
-    user.refreshToken = refreshToken
-    await user.save()
+    const { accessToken, refreshToken } = generateTokens(user)
 
     // Log successful login
-    console.log(`User ${user._id} logged in successfully from ${req.ip}`)
+    console.log(`User ${user._id} logged in successfully`)
 
     // Create response with user data
     const response = NextResponse.json({
@@ -88,8 +47,8 @@ export async function POST(req: NextRequest) {
         firstName: user.firstName,
         lastName: user.lastName,
         firmId: user.firmId,
-        roleId: user.roleId._id,
-        permissions: (user.roleId as any).permissions || [],
+        roleId: user.roleId,
+        permissions: role?.permissions || [],
         mfaEnabled: user.mfaEnabled,
         isActive: user.isActive,
         isEmailVerified: user.isEmailVerified
@@ -113,10 +72,10 @@ export async function POST(req: NextRequest) {
       path: '/'
     })
 
-    console.log('✅ Login successful, tokens set')
+    console.log('✅ Mock login successful, tokens set')
     return response
   } catch (error) {
-    console.error('❌ Login error:', error)
+    console.error('❌ Mock login error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

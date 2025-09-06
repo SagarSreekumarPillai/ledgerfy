@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { jwtVerify } from 'jose'
-import dbConnect from '@/lib/db'
-import User from '@/models/User'
+import { verifyTokenAndGetUser } from '@/lib/mockAuth'
 
 export async function GET(req: NextRequest) {
   try {
-    await dbConnect()
-
     // Get token from cookies
     const token = req.cookies.get('accessToken')?.value
 
@@ -14,20 +10,16 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'No token provided' }, { status: 401 })
     }
 
-    // Verify token
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-    const { payload } = await jwtVerify(token, secret)
-
-    // Get user from database
-    const user = await User.findById(payload.userId).select('-password')
+    // Verify token and get user from mock data
+    const user = verifyTokenAndGetUser(token)
     
-    if (!user || !user.isActive) {
+    if (!user) {
       return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 })
     }
 
     return NextResponse.json({ user })
   } catch (error) {
-    console.error('Auth check error:', error)
+    console.error('Mock auth check error:', error)
     return NextResponse.json({ error: 'Authentication failed' }, { status: 401 })
   }
 }

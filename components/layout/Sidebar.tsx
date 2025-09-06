@@ -62,6 +62,10 @@ export function Sidebar({
     return userPermissions.includes(permission)
   }
 
+  // Debug logging
+  console.log('Sidebar userPermissions:', userPermissions)
+  console.log('Sidebar collapsed:', collapsed)
+
   const toggleSection = (sectionName: string) => {
     setExpandedSections(prev => 
       prev.includes(sectionName) 
@@ -173,12 +177,19 @@ export function Sidebar({
   ]
 
   const renderNavigationItem = (item: NavigationItem, level: number = 0) => {
-    if (!hasPermission(item.requiredPermission)) return null
+    // During loading or if no permissions are set, show all items
+    if (userPermissions.length === 0 || userPermissions.includes('*')) {
+      // Show all items during loading or with wildcard permissions
+    } else if (!hasPermission(item.requiredPermission)) {
+      return null
+    }
 
     const isActive = pathname === item.href
     const hasChildren = item.children && item.children.length > 0
     const isExpanded = expandedSections.includes(item.name.toLowerCase().replace(/\s+/g, '-'))
-    const hasVisibleChildren = hasChildren && item.children!.some(child => hasPermission(child.requiredPermission))
+    const hasVisibleChildren = hasChildren && item.children!.some(child => 
+      userPermissions.length === 0 || userPermissions.includes('*') || hasPermission(child.requiredPermission)
+    )
 
     if (hasChildren && hasVisibleChildren) {
       return (
