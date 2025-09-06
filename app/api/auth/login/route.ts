@@ -9,8 +9,10 @@ export async function POST(req: NextRequest) {
     
     const { email, password } = await req.json()
     console.log('📧 Login attempt for:', email)
+    console.log('🔑 Password provided:', password ? 'Yes' : 'No')
     
     if (!email || !password) {
+      console.log('❌ Missing email or password')
       return NextResponse.json(
         { error: 'Email and password are required' },
         { status: 400 }
@@ -20,8 +22,10 @@ export async function POST(req: NextRequest) {
     // Authenticate user using mock data
     const user = await authenticateUser(email, password)
     console.log('👤 User found:', user ? 'Yes' : 'No')
+    console.log('👤 User details:', user ? { id: user._id, email: user.email, active: user.isActive } : 'None')
     
     if (!user) {
+      console.log('❌ Authentication failed')
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
