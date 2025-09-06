@@ -70,7 +70,7 @@ export default function LoginPage() {
     setIsSubmitting(true)
     
     try {
-      const success = await login('admin@testfirm.com', 'admin123')
+      const success = await login('admin@ledgerfy.com', 'password123')
       if (!success) {
         return
       }
@@ -249,7 +249,7 @@ export default function LoginPage() {
                   )}
                 </Button>
                 <p className="mt-2 text-xs text-center text-gray-500 dark:text-gray-400">
-                  Demo: admin@testfirm.com / admin123
+                  Demo: admin@ledgerfy.com / password123
                 </p>
               </div>
             </div>
