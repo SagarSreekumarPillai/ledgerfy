@@ -37,25 +37,61 @@ export const mockRoles: MockRole[] = [
     _id: 'role_admin',
     name: 'Administrator',
     permissions: [
+      // Dashboard and core permissions
+      'dashboard:read',
+      'analytics:read', 'analytics:export',
+      'ledger:read', 'ledger:write', 'tally:import',
+      
+      // User management
       'users:read', 'users:write', 'users:delete',
-      'clients:read', 'clients:write', 'clients:delete',
+      
+      // Client management
+      'clients:read', 'clients:write', 'clients:delete', 'clients:create',
+      
+      // Project management
       'projects:read', 'projects:write', 'projects:delete',
-      'documents:read', 'documents:write', 'documents:delete',
+      
+      // Document management
+      'documents:read', 'documents:write', 'documents:delete', 'documents:upload', 'documents:share',
+      
+      // Compliance
       'compliance:read', 'compliance:write', 'compliance:delete',
+      
+      // Reports
       'reports:read', 'reports:write',
-      'settings:read', 'settings:write',
-      'audit:read'
+      
+      // Settings and firm management
+      'settings:read', 'settings:write', 'firm:read', 'firm:update',
+      
+      // Security and audit
+      'audit:read', 'integrations:read'
     ]
   },
   {
     _id: 'role_manager',
     name: 'Manager',
     permissions: [
+      // Dashboard and core permissions
+      'dashboard:read',
+      'analytics:read',
+      'ledger:read',
+      
+      // User management (limited)
       'users:read',
-      'clients:read', 'clients:write',
+      
+      // Client management
+      'clients:read', 'clients:write', 'clients:create',
+      
+      // Project management
       'projects:read', 'projects:write',
-      'documents:read', 'documents:write',
+      
+      // Document management
+      'documents:read', 'documents:write', 'documents:upload', 'documents:share',
+      
+      // Compliance
       'compliance:read', 'compliance:write',
+      
+      // Reports
       'reports:read', 'reports:write'
     ]
   },
@@ -63,10 +99,24 @@ export const mockRoles: MockRole[] = [
     _id: 'role_accountant',
     name: 'Accountant',
     permissions: [
+      // Dashboard and core permissions
+      'dashboard:read',
+      'analytics:read',
+      'ledger:read', 'ledger:write',
+      
+      // Client management (read-only)
       'clients:read',
+      
+      // Project management (limited)
       'projects:read', 'projects:write',
+      
+      // Document management
       'documents:read', 'documents:write',
+      
+      // Compliance
       'compliance:read',
+      
+      // Reports
       'reports:read'
     ]
   }
