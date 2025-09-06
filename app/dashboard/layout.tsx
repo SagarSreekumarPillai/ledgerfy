@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { ThemeProvider } from '@/lib/theme-context'
@@ -22,8 +22,25 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   const { user, logout } = useAuth()
   const router = useRouter()
+
+  // Initialize sidebar state from localStorage on client side
+  useEffect(() => {
+    setIsClient(true)
+    const savedCollapsedState = localStorage.getItem('sidebarCollapsed')
+    if (savedCollapsedState !== null) {
+      setSidebarCollapsed(JSON.parse(savedCollapsedState))
+    }
+  }, [])
+
+  // Save sidebar state to localStorage whenever it changes
+  useEffect(() => {
+    if (isClient) {
+      localStorage.setItem('sidebarCollapsed', JSON.stringify(sidebarCollapsed))
+    }
+  }, [sidebarCollapsed, isClient])
 
   const handleLogout = async () => {
     try {
@@ -69,14 +86,15 @@ export default function DashboardLayout({
             sidebarOpen={sidebarOpen} 
             setSidebarOpen={setSidebarOpen}
             userPermissions={user?.permissions || []}
-            collapsed={sidebarCollapsed}
+            collapsed={isClient ? sidebarCollapsed : false}
             onToggleCollapse={toggleSidebarCollapse}
           />
 
           {/* Main content */}
           <div className={cn(
             "transition-all duration-300 ease-in-out scrollbar-gutter-stable custom-scrollbar",
-            sidebarCollapsed ? "lg:pl-16" : "lg:pl-64"
+            // Use default expanded state during SSR and initial load to prevent layout shift
+            !isClient ? "lg:pl-64" : (sidebarCollapsed ? "lg:pl-16" : "lg:pl-64")
           )}>
             {/* Top navigation */}
             <div className="flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">

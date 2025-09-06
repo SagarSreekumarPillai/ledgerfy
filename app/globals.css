@@ -172,13 +172,104 @@
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
   }
   
   *::-webkit-scrollbar {
     background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
   }
   
   *::-webkit-scrollbar-corner {
     background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  
+  /* Additional browser-specific overrides */
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track,
+  div::-webkit-scrollbar-track {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  div::-webkit-scrollbar {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  
+  /* Override any potential browser defaults */
+  * {
+    scrollbar-track-color: transparent !important;
+    scrollbar-base-color: transparent !important;
+  }
+  
+  /* Additional aggressive overrides for stubborn browsers */
+  ::-webkit-scrollbar-track-piece {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  
+  ::-webkit-scrollbar-button {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  
+  /* Ensure no background on any scrollbar element */
+  *::-webkit-scrollbar-track-piece,
+  *::-webkit-scrollbar-button,
+  *::-webkit-scrollbar-track,
+  *::-webkit-scrollbar {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* Target specific elements that might have scrollbars */
+  .main-content::-webkit-scrollbar-track,
+  .dashboard-content::-webkit-scrollbar-track,
+  [class*="scroll"]::-webkit-scrollbar-track {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  
+  /* Safari and WebKit specific overrides */
+  @supports (-webkit-appearance: none) {
+    ::-webkit-scrollbar-track {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      -webkit-box-shadow: none !important;
+      box-shadow: none !important;
+    }
+    
+    ::-webkit-scrollbar {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+    }
+  }
+  
+  /* Chrome/Edge specific overrides */
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    ::-webkit-scrollbar-track {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+    }
   }
 }

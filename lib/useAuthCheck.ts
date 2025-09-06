@@ -66,3 +66,4 @@ export function useAuthCheck(): AuthState {
 
   return authState
 }
+
