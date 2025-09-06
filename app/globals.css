@@ -73,11 +73,12 @@
   
   /* Prevent double scrollbars */
   html {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   
   body {
     overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 
