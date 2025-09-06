@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   Users, 
   Plus, 
@@ -125,6 +126,7 @@ const statusOptions = [
 ]
 
 export default function ClientsPage() {
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedType, setSelectedType] = useState('All Types')
   const [selectedStatus, setSelectedStatus] = useState('All Status')
@@ -171,7 +173,7 @@ export default function ClientsPage() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Clients</h1>
           <p className="text-gray-600 dark:text-gray-400">Manage your client relationships and information</p>
         </div>
-        <Button className="flex items-center space-x-2">
+        <Button className="flex items-center space-x-2" onClick={() => router.push('/dashboard/clients/new')}>
           <UserPlus className="h-4 w-4" />
           <span>Add Client</span>
         </Button>
@@ -449,7 +451,7 @@ export default function ClientsPage() {
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredClients.map((client) => (
-                  <tr key={client.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <tr key={client.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" onClick={() => router.push(`/dashboard/clients/${client.id}`)}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">

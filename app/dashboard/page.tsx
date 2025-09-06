@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   TrendingUp, 
   Users, 
@@ -56,6 +57,7 @@ interface UpcomingDeadline {
 
 export default function DashboardPage() {
   const { user } = useAuth()
+  const router = useRouter()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([])
   const [upcomingDeadlines, setUpcomingDeadlines] = useState<UpcomingDeadline[]>([])
@@ -251,7 +253,7 @@ export default function DashboardPage() {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => router.push('/dashboard/clients')}>
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
@@ -265,7 +267,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => router.push('/dashboard/projects')}>
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
@@ -279,7 +281,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => router.push('/dashboard/compliance')}>
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
@@ -293,7 +295,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => router.push('/dashboard/compliance')}>
           <CardContent className="p-6">
             <div className="flex items-center">
               <div className="p-2 bg-red-100 dark:bg-red-900 rounded-lg">
@@ -392,7 +394,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {recentActivities.map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-3">
+                <div key={activity.id} className="flex items-start space-x-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors" onClick={() => activity.actionUrl && router.push(activity.actionUrl)}>
                   <div className="flex-shrink-0 mt-1">
                     {getTypeIcon(activity.type)}
                   </div>
@@ -428,7 +430,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {upcomingDeadlines.map((deadline) => (
-                <div key={deadline.id} className="flex items-start space-x-3">
+                <div key={deadline.id} className="flex items-start space-x-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors" onClick={() => deadline.actionUrl && router.push(deadline.actionUrl)}>
                   <div className="flex-shrink-0 mt-1">
                     <Calendar className="h-4 w-4 text-blue-600" />
                   </div>
