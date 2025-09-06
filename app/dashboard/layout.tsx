@@ -97,7 +97,7 @@ export default function DashboardLayout({
 
           {/* Main content */}
           <div className={cn(
-            "transition-all duration-300 ease-in-out scrollbar-gutter-stable custom-scrollbar",
+            "transition-all duration-300 ease-in-out min-h-screen",
             // Use default expanded state during SSR and initial load to prevent layout shift
             !isClient ? "lg:pl-64" : (sidebarCollapsed ? "lg:pl-16" : "lg:pl-64")
           )}>
