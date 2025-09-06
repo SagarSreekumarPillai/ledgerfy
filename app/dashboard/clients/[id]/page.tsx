@@ -25,7 +25,8 @@ import {
   Activity,
   CreditCard,
   Receipt,
-  Banknote
+  Banknote,
+  Eye
 } from 'lucide-react'
 import { PageHeader, PageHeaderActions } from '@/components/layout/PageHeader'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

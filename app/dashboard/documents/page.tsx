@@ -2,6 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   FileText, 
   Upload, 
@@ -91,6 +92,7 @@ interface Document {
 
 export default function DocumentsPage() {
   const { hasPermission } = useAuth()
+  const router = useRouter()
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
@@ -429,7 +431,7 @@ export default function DocumentsPage() {
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredDocuments.map((doc) => (
-                <div key={doc._id} className="group relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-all duration-200">
+                <div key={doc._id} className="group relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-all duration-200 cursor-pointer" onClick={() => router.push(`/dashboard/documents/${doc._id}`)}>
                   {/* Document Icon */}
                   <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
                     <span className="text-2xl">{getFileIcon(doc.mimeType)}</span>
@@ -591,7 +593,7 @@ export default function DocumentsPage() {
                 </thead>
                 <tbody>
                   {filteredDocuments.map((doc) => (
-                    <tr key={doc._id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <tr key={doc._id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer" onClick={() => router.push(`/dashboard/documents/${doc._id}`)}>
                       <td className="py-4 px-4">
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">

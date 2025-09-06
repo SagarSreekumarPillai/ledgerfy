@@ -436,7 +436,7 @@ export default function TasksPage() {
   const renderListView = () => (
     <div className="space-y-4">
       {filteredTasks.map((task) => (
-        <Card key={task.id} className="hover:shadow-md transition-shadow">
+        <Card key={task.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => router.push(`/dashboard/projects/tasks/${task.id}`)}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4 flex-1">
