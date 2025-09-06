@@ -36,13 +36,18 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     }
   }, [loading])
 
-  // Show loading state while checking auth
+  // During loading, render children but with loading state
+  // This allows the sidebar to render with proper permissions
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+      <div className="relative">
+        {children}
+        {/* Overlay loading indicator */}
+        <div className="fixed inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+          </div>
         </div>
       </div>
     )

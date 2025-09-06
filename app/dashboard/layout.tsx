@@ -25,7 +25,6 @@ export default function DashboardLayout({
   const [isClient, setIsClient] = useState(false)
   const { user, logout, loading } = useAuth()
   const router = useRouter()
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
 
   // Initialize sidebar state from localStorage on client side
   useEffect(() => {
@@ -42,13 +41,6 @@ export default function DashboardLayout({
       localStorage.setItem('sidebarCollapsed', JSON.stringify(sidebarCollapsed))
     }
   }, [sidebarCollapsed, isClient])
-
-  // Track when we have user data or when loading is complete
-  useEffect(() => {
-    if (user || (!loading && !user)) {
-      setIsInitialLoad(false)
-    }
-  }, [user, loading])
 
   const handleLogout = async () => {
     try {
@@ -93,7 +85,7 @@ export default function DashboardLayout({
           <Sidebar 
             sidebarOpen={sidebarOpen} 
             setSidebarOpen={setSidebarOpen}
-            userPermissions={isInitialLoad ? ['*'] : (user?.permissions || [])}
+            userPermissions={loading ? ['*'] : (user?.permissions || [])}
             collapsed={isClient ? sidebarCollapsed : false}
             onToggleCollapse={toggleSidebarCollapse}
           />
@@ -136,7 +128,7 @@ export default function DashboardLayout({
                   
                   <ThemeToggle />
                   <TopNavUserMenu
-                    user={isInitialLoad ? undefined : (user || undefined)}
+                    user={loading ? undefined : (user || undefined)}
                     onLogout={handleLogout}
                     onMfaToggle={handleMfaToggle}
                     onProfileEdit={handleProfileEdit}
@@ -149,14 +141,7 @@ export default function DashboardLayout({
             {/* Page content */}
             <main className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                {isInitialLoad ? (
-                  <div className="flex items-center justify-center min-h-[400px]">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <span className="ml-3 text-gray-600 dark:text-gray-400">Loading...</span>
-                  </div>
-                ) : (
-                  children
-                )}
+                {children}
               </div>
             </main>
           </div>
@@ -165,7 +150,7 @@ export default function DashboardLayout({
           <CommandPalette
             isOpen={commandPaletteOpen}
             onClose={() => setCommandPaletteOpen(false)}
-            userPermissions={isInitialLoad ? ['*'] : (user?.permissions || [])}
+            userPermissions={loading ? ['*'] : (user?.permissions || [])}
           />
         </div>
       </ThemeProvider>
