@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   Users, 
   Plus, 
@@ -50,6 +51,7 @@ interface Role {
 
 export default function UsersPage() {
   const { hasPermission } = useAuth()
+  const router = useRouter()
   const [users, setUsers] = useState<User[]>([])
   const [roles, setRoles] = useState<Role[]>([])
   const [loading, setLoading] = useState(true)
@@ -213,7 +215,7 @@ export default function UsersPage() {
       >
         <PageHeaderActions>
           <RequirePermission permission="users:invite">
-            <Button>
+            <Button onClick={() => router.push('/dashboard/settings/users/new')}>
               <UserPlus className="h-4 w-4 mr-2" />
               Invite User
             </Button>
@@ -298,7 +300,7 @@ export default function UsersPage() {
           <CardTitle className="flex items-center justify-between">
             <span>Users ({filteredUsers.length})</span>
             <RequirePermission permission="users:create">
-              <Button size="sm">
+              <Button size="sm" onClick={() => router.push('/dashboard/settings/users/new')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add User
               </Button>

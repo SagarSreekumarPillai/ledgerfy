@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   FolderOpen, 
   Plus, 
@@ -79,6 +80,7 @@ interface Task {
 
 export default function ProjectsPage() {
   const { hasPermission } = useAuth()
+  const router = useRouter()
   const [projects, setProjects] = useState<Project[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -379,7 +381,7 @@ export default function ProjectsPage() {
             </Button>
           </div>
           <RequirePermission permission="projects:create">
-            <Button>
+            <Button onClick={() => router.push('/dashboard/projects/new')}>
               <Plus className="h-4 w-4 mr-2" />
               New Project
             </Button>
@@ -612,7 +614,7 @@ export default function ProjectsPage() {
             <CardContent>
               <div className="space-y-4">
                 {projects.slice(0, 3).map((project) => (
-                  <div key={project._id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  <div key={project._id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => router.push(`/dashboard/projects/${project._id}`)}>
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(project.status)}
@@ -673,7 +675,7 @@ export default function ProjectsPage() {
                 </thead>
                 <tbody>
                   {filteredProjects.map((project) => (
-                    <tr key={project._id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <tr key={project._id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer" onClick={() => router.push(`/dashboard/projects/${project._id}`)}>
                       <td className="py-4 px-4">
                         <div>
                           <div className="font-medium text-gray-900 dark:text-white">{project.name}</div>
