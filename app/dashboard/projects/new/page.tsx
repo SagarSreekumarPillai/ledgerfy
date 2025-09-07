@@ -14,7 +14,18 @@ import {
   FileText,
   AlertCircle,
   Check,
-  X
+  X,
+  Copy,
+  Shield,
+  BookOpen,
+  Settings,
+  MessageSquare,
+  AlertTriangle,
+  CheckCircle,
+  Plus,
+  Trash2,
+  Eye,
+  Download
 } from 'lucide-react'
 import { PageHeader, PageHeaderActions } from '@/components/layout/PageHeader'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -23,6 +34,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RequirePermission } from '@/components/auth/RequirePermission'
 import { useAuth } from '@/lib/auth-context'
 import { cn } from '@/lib/utils'
@@ -55,12 +69,57 @@ interface ProjectFormData {
   projectManager: string
   teamMembers: string[]
   milestones: MilestoneFormData[]
+  // CA Firm specific fields
+  billingType: string
+  hourlyRate: string
+  fixedFee: string
+  retainerAmount: string
+  complianceRequirements: string[]
+  documentRequirements: DocumentRequirement[]
+  riskAssessment: RiskAssessment[]
+  clientCommunication: ClientCommunication
+  projectTemplate: string
+  isRecurring: boolean
+  recurringFrequency: string
+  confidentialityLevel: string
+  regulatoryDeadlines: RegulatoryDeadline[]
 }
 
 interface MilestoneFormData {
   title: string
   description: string
   dueDate: string
+}
+
+interface DocumentRequirement {
+  id: string
+  name: string
+  type: string
+  isRequired: boolean
+  description: string
+}
+
+interface RiskAssessment {
+  id: string
+  risk: string
+  impact: string
+  probability: string
+  mitigation: string
+}
+
+interface ClientCommunication {
+  preferredMethod: string
+  frequency: string
+  reportingSchedule: string
+  escalationContact: string
+}
+
+interface RegulatoryDeadline {
+  id: string
+  requirement: string
+  deadline: string
+  authority: string
+  penalty: string
 }
 
 interface FormErrors {
@@ -95,7 +154,26 @@ export default function NewProjectPage() {
     estimatedHours: '',
     projectManager: '',
     teamMembers: [],
-    milestones: []
+    milestones: [],
+    // CA Firm specific fields
+    billingType: 'hourly',
+    hourlyRate: '',
+    fixedFee: '',
+    retainerAmount: '',
+    complianceRequirements: [],
+    documentRequirements: [],
+    riskAssessment: [],
+    clientCommunication: {
+      preferredMethod: 'email',
+      frequency: 'weekly',
+      reportingSchedule: 'monthly',
+      escalationContact: ''
+    },
+    projectTemplate: '',
+    isRecurring: false,
+    recurringFrequency: 'monthly',
+    confidentialityLevel: 'standard',
+    regulatoryDeadlines: []
   })
   const [errors, setErrors] = useState<FormErrors>({})
 
@@ -166,12 +244,59 @@ export default function NewProjectPage() {
   }, [])
 
   const projectTypes = [
-    { value: 'compliance', label: 'Compliance', description: 'GST, ROC, and regulatory compliance' },
-    { value: 'audit', label: 'Audit', description: 'Statutory and internal audits' },
-    { value: 'consulting', label: 'Consulting', description: 'Business and tax consulting' },
-    { value: 'tax', label: 'Tax Planning', description: 'Tax optimization and planning' },
+    { value: 'annual_audit', label: 'Annual Audit', description: 'Statutory audit of financial statements' },
+    { value: 'gst_compliance', label: 'GST Compliance', description: 'GST return filing and compliance' },
+    { value: 'tax_filing', label: 'Tax Filing', description: 'Income tax return preparation and filing' },
+    { value: 'roc_compliance', label: 'ROC Compliance', description: 'Registrar of Companies compliance' },
     { value: 'bookkeeping', label: 'Bookkeeping', description: 'Maintaining books of accounts' },
-    { value: 'other', label: 'Other', description: 'Other services' }
+    { value: 'tax_planning', label: 'Tax Planning', description: 'Tax optimization and planning' },
+    { value: 'internal_audit', label: 'Internal Audit', description: 'Internal control and process audit' },
+    { value: 'due_diligence', label: 'Due Diligence', description: 'Financial and legal due diligence' },
+    { value: 'valuation', label: 'Valuation', description: 'Business and asset valuation' },
+    { value: 'consulting', label: 'Business Consulting', description: 'Strategic business consulting' },
+    { value: 'other', label: 'Other', description: 'Other professional services' }
+  ]
+
+  const projectTemplates = [
+    {
+      id: 'annual_audit_template',
+      name: 'Annual Audit Template',
+      type: 'annual_audit',
+      description: 'Complete annual audit workflow with all required steps',
+      estimatedHours: 120,
+      milestones: [
+        { title: 'Planning & Risk Assessment', description: 'Initial planning and risk assessment', dueDate: '' },
+        { title: 'Fieldwork & Testing', description: 'Detailed audit procedures and testing', dueDate: '' },
+        { title: 'Review & Documentation', description: 'Review findings and prepare documentation', dueDate: '' },
+        { title: 'Report Preparation', description: 'Draft and finalize audit report', dueDate: '' }
+      ]
+    },
+    {
+      id: 'gst_compliance_template',
+      name: 'GST Compliance Template',
+      type: 'gst_compliance',
+      description: 'Monthly GST return filing and compliance workflow',
+      estimatedHours: 16,
+      milestones: [
+        { title: 'Data Collection', description: 'Collect GST data and documents', dueDate: '' },
+        { title: 'Return Preparation', description: 'Prepare GSTR-1, GSTR-3B returns', dueDate: '' },
+        { title: 'Review & Filing', description: 'Review and file returns', dueDate: '' },
+        { title: 'Reconciliation', description: 'Reconcile with books of accounts', dueDate: '' }
+      ]
+    },
+    {
+      id: 'tax_filing_template',
+      name: 'Tax Filing Template',
+      type: 'tax_filing',
+      description: 'Income tax return preparation and filing workflow',
+      estimatedHours: 24,
+      milestones: [
+        { title: 'Document Collection', description: 'Collect all required tax documents', dueDate: '' },
+        { title: 'Return Preparation', description: 'Prepare ITR forms', dueDate: '' },
+        { title: 'Review & Validation', description: 'Review and validate return', dueDate: '' },
+        { title: 'Filing & Acknowledgment', description: 'File return and obtain acknowledgment', dueDate: '' }
+      ]
+    }
   ]
 
   const priorities = [
@@ -260,13 +385,20 @@ export default function NewProjectPage() {
     }
   }
 
-  const handleInputChange = (field: keyof ProjectFormData, value: string | string[]) => {
+  const handleInputChange = (field: keyof ProjectFormData, value: string | string[] | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     
     // Clear error when user starts typing
     if (errors[field as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [field]: undefined }))
     }
+  }
+
+  const handleClientCommunicationChange = (field: keyof ClientCommunication, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      clientCommunication: { ...prev.clientCommunication, [field]: value }
+    }))
   }
 
   const addMilestone = () => {
@@ -288,6 +420,76 @@ export default function NewProjectPage() {
       ...prev,
       milestones: prev.milestones.map((milestone, i) => 
         i === index ? { ...milestone, [field]: value } : milestone
+      )
+    }))
+  }
+
+  const applyTemplate = (template: any) => {
+    setFormData(prev => ({
+      ...prev,
+      projectType: template.type,
+      estimatedHours: template.estimatedHours.toString(),
+      milestones: template.milestones,
+      projectTemplate: template.id
+    }))
+  }
+
+  const addDocumentRequirement = () => {
+    const newRequirement: DocumentRequirement = {
+      id: Date.now().toString(),
+      name: '',
+      type: 'financial',
+      isRequired: true,
+      description: ''
+    }
+    setFormData(prev => ({
+      ...prev,
+      documentRequirements: [...prev.documentRequirements, newRequirement]
+    }))
+  }
+
+  const removeDocumentRequirement = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      documentRequirements: prev.documentRequirements.filter(req => req.id !== id)
+    }))
+  }
+
+  const updateDocumentRequirement = (id: string, field: keyof DocumentRequirement, value: string | boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      documentRequirements: prev.documentRequirements.map(req => 
+        req.id === id ? { ...req, [field]: value } : req
+      )
+    }))
+  }
+
+  const addRiskAssessment = () => {
+    const newRisk: RiskAssessment = {
+      id: Date.now().toString(),
+      risk: '',
+      impact: 'medium',
+      probability: 'medium',
+      mitigation: ''
+    }
+    setFormData(prev => ({
+      ...prev,
+      riskAssessment: [...prev.riskAssessment, newRisk]
+    }))
+  }
+
+  const removeRiskAssessment = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      riskAssessment: prev.riskAssessment.filter(risk => risk.id !== id)
+    }))
+  }
+
+  const updateRiskAssessment = (id: string, field: keyof RiskAssessment, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      riskAssessment: prev.riskAssessment.map(risk => 
+        risk.id === id ? { ...risk, [field]: value } : risk
       )
     }))
   }
@@ -334,7 +536,55 @@ export default function NewProjectPage() {
       </PageHeader>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Project Templates */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <BookOpen className="h-5 w-5 mr-2" />
+              Project Templates
+            </CardTitle>
+            <CardDescription>
+              Choose from pre-configured templates for common CA firm projects
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              {projectTemplates.map((template) => (
+                <div key={template.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium text-gray-900 dark:text-white">{template.name}</h4>
+                    <Badge variant="secondary">{template.estimatedHours}h</Badge>
+                  </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{template.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-400">{template.milestones.length} milestones</span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => applyTemplate(template)}
+                    >
+                      <Copy className="h-4 w-4 mr-2" />
+                      Apply
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Tabs defaultValue="basic" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="basic">Basic Info</TabsTrigger>
+            <TabsTrigger value="billing">Billing & Fees</TabsTrigger>
+            <TabsTrigger value="compliance">Compliance</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
+            <TabsTrigger value="communication">Communication</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="basic" className="space-y-6">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Project Information */}
           <Card>
             <CardHeader>
@@ -692,6 +942,391 @@ export default function NewProjectPage() {
             )}
           </CardContent>
         </Card>
+          </TabsContent>
+
+          <TabsContent value="billing" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <DollarSign className="h-5 w-5 mr-2" />
+                  Billing & Fee Structure
+                </CardTitle>
+                <CardDescription>
+                  Configure billing method and fee structure for this project
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="billingType">Billing Type</Label>
+                  <Select value={formData.billingType} onValueChange={(value) => handleInputChange('billingType', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select billing type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="hourly">Hourly Rate</SelectItem>
+                      <SelectItem value="fixed">Fixed Fee</SelectItem>
+                      <SelectItem value="retainer">Retainer</SelectItem>
+                      <SelectItem value="hybrid">Hybrid (Fixed + Hourly)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {formData.billingType === 'hourly' && (
+                  <div>
+                    <Label htmlFor="hourlyRate">Hourly Rate (₹)</Label>
+                    <Input
+                      id="hourlyRate"
+                      type="number"
+                      value={formData.hourlyRate}
+                      onChange={(e) => handleInputChange('hourlyRate', e.target.value)}
+                      placeholder="Enter hourly rate"
+                      min="0"
+                      step="100"
+                    />
+                  </div>
+                )}
+
+                {formData.billingType === 'fixed' && (
+                  <div>
+                    <Label htmlFor="fixedFee">Fixed Fee (₹)</Label>
+                    <Input
+                      id="fixedFee"
+                      type="number"
+                      value={formData.fixedFee}
+                      onChange={(e) => handleInputChange('fixedFee', e.target.value)}
+                      placeholder="Enter fixed fee amount"
+                      min="0"
+                      step="1000"
+                    />
+                  </div>
+                )}
+
+                {formData.billingType === 'retainer' && (
+                  <div>
+                    <Label htmlFor="retainerAmount">Retainer Amount (₹)</Label>
+                    <Input
+                      id="retainerAmount"
+                      type="number"
+                      value={formData.retainerAmount}
+                      onChange={(e) => handleInputChange('retainerAmount', e.target.value)}
+                      placeholder="Enter retainer amount"
+                      min="0"
+                      step="1000"
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="isRecurring"
+                    checked={formData.isRecurring}
+                    onCheckedChange={(checked) => handleInputChange('isRecurring', checked)}
+                  />
+                  <Label htmlFor="isRecurring">Recurring Project</Label>
+                </div>
+
+                {formData.isRecurring && (
+                  <div>
+                    <Label htmlFor="recurringFrequency">Recurring Frequency</Label>
+                    <Select value={formData.recurringFrequency} onValueChange={(value) => handleInputChange('recurringFrequency', value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                        <SelectItem value="quarterly">Quarterly</SelectItem>
+                        <SelectItem value="annually">Annually</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="compliance" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Shield className="h-5 w-5 mr-2" />
+                  Compliance & Risk Assessment
+                </CardTitle>
+                <CardDescription>
+                  Define compliance requirements and assess project risks
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <Label>Compliance Requirements</Label>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {['GST', 'Income Tax', 'ROC', 'TDS', 'PF/ESI', 'Professional Standards'].map((req) => (
+                      <div key={req} className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id={`compliance-${req}`}
+                          checked={formData.complianceRequirements.includes(req)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              handleInputChange('complianceRequirements', [...formData.complianceRequirements, req])
+                            } else {
+                              handleInputChange('complianceRequirements', formData.complianceRequirements.filter(r => r !== req))
+                            }
+                          }}
+                          className="rounded border-gray-300"
+                        />
+                        <Label htmlFor={`compliance-${req}`} className="text-sm">{req}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <Label>Risk Assessment</Label>
+                    <Button type="button" variant="outline" size="sm" onClick={addRiskAssessment}>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Risk
+                    </Button>
+                  </div>
+                  <div className="space-y-4">
+                    {formData.riskAssessment.map((risk) => (
+                      <div key={risk.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="font-medium text-gray-900 dark:text-white">Risk Assessment</h4>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeRiskAssessment(risk.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                          <div>
+                            <Label>Risk Description</Label>
+                            <Input
+                              value={risk.risk}
+                              onChange={(e) => updateRiskAssessment(risk.id, 'risk', e.target.value)}
+                              placeholder="Describe the risk"
+                            />
+                          </div>
+                          <div>
+                            <Label>Impact</Label>
+                            <Select value={risk.impact} onValueChange={(value) => updateRiskAssessment(risk.id, 'impact', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low</SelectItem>
+                                <SelectItem value="medium">Medium</SelectItem>
+                                <SelectItem value="high">High</SelectItem>
+                                <SelectItem value="critical">Critical</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Probability</Label>
+                            <Select value={risk.probability} onValueChange={(value) => updateRiskAssessment(risk.id, 'probability', value)}>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="low">Low</SelectItem>
+                                <SelectItem value="medium">Medium</SelectItem>
+                                <SelectItem value="high">High</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Mitigation Strategy</Label>
+                            <Input
+                              value={risk.mitigation}
+                              onChange={(e) => updateRiskAssessment(risk.id, 'mitigation', e.target.value)}
+                              placeholder="How to mitigate this risk"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="confidentialityLevel">Confidentiality Level</Label>
+                  <Select value={formData.confidentialityLevel} onValueChange={(value) => handleInputChange('confidentialityLevel', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select confidentiality level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="standard">Standard</SelectItem>
+                      <SelectItem value="confidential">Confidential</SelectItem>
+                      <SelectItem value="highly_confidential">Highly Confidential</SelectItem>
+                      <SelectItem value="restricted">Restricted</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="documents" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <FileText className="h-5 w-5 mr-2" />
+                  Document Requirements
+                </CardTitle>
+                <CardDescription>
+                  Define required documents and deliverables for this project
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>Required Documents</Label>
+                  <Button type="button" variant="outline" size="sm" onClick={addDocumentRequirement}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Document
+                  </Button>
+                </div>
+                <div className="space-y-4">
+                  {formData.documentRequirements.map((req) => (
+                    <div key={req.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="font-medium text-gray-900 dark:text-white">Document Requirement</h4>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeDocumentRequirement(req.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                          <Label>Document Name</Label>
+                          <Input
+                            value={req.name}
+                            onChange={(e) => updateDocumentRequirement(req.id, 'name', e.target.value)}
+                            placeholder="e.g., Financial Statements"
+                          />
+                        </div>
+                        <div>
+                          <Label>Document Type</Label>
+                          <Select value={req.type} onValueChange={(value) => updateDocumentRequirement(req.id, 'type', value)}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="financial">Financial</SelectItem>
+                              <SelectItem value="legal">Legal</SelectItem>
+                              <SelectItem value="tax">Tax</SelectItem>
+                              <SelectItem value="compliance">Compliance</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="md:col-span-2">
+                          <Label>Description</Label>
+                          <Textarea
+                            value={req.description}
+                            onChange={(e) => updateDocumentRequirement(req.id, 'description', e.target.value)}
+                            placeholder="Describe the document requirement"
+                            rows={2}
+                          />
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id={`required-${req.id}`}
+                            checked={req.isRequired}
+                            onChange={(e) => updateDocumentRequirement(req.id, 'isRequired', e.target.checked)}
+                            className="rounded border-gray-300"
+                          />
+                          <Label htmlFor={`required-${req.id}`} className="text-sm">Required</Label>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="communication" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <MessageSquare className="h-5 w-5 mr-2" />
+                  Client Communication
+                </CardTitle>
+                <CardDescription>
+                  Configure communication preferences and reporting schedule
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="preferredMethod">Preferred Communication Method</Label>
+                  <Select value={formData.clientCommunication.preferredMethod} onValueChange={(value) => handleClientCommunicationChange('preferredMethod', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select communication method" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="email">Email</SelectItem>
+                      <SelectItem value="phone">Phone</SelectItem>
+                      <SelectItem value="video_call">Video Call</SelectItem>
+                      <SelectItem value="in_person">In Person</SelectItem>
+                      <SelectItem value="portal">Client Portal</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="frequency">Communication Frequency</Label>
+                  <Select value={formData.clientCommunication.frequency} onValueChange={(value) => handleClientCommunicationChange('frequency', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select frequency" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="daily">Daily</SelectItem>
+                      <SelectItem value="weekly">Weekly</SelectItem>
+                      <SelectItem value="bi_weekly">Bi-weekly</SelectItem>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                      <SelectItem value="as_needed">As Needed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="reportingSchedule">Reporting Schedule</Label>
+                  <Select value={formData.clientCommunication.reportingSchedule} onValueChange={(value) => handleClientCommunicationChange('reportingSchedule', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select reporting schedule" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="weekly">Weekly</SelectItem>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                      <SelectItem value="quarterly">Quarterly</SelectItem>
+                      <SelectItem value="milestone">At Milestones</SelectItem>
+                      <SelectItem value="project_end">Project End</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="escalationContact">Escalation Contact</Label>
+                  <Input
+                    id="escalationContact"
+                    value={formData.clientCommunication.escalationContact}
+                    onChange={(e) => handleClientCommunicationChange('escalationContact', e.target.value)}
+                    placeholder="Enter escalation contact details"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* Action Buttons */}
         <Card>

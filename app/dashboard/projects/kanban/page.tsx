@@ -28,6 +28,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 
 interface Project {
@@ -173,6 +179,27 @@ export default function ProjectsKanbanPage() {
   const [categoryFilter, setCategoryFilter] = useState('All')
   const [assignedToFilter, setAssignedToFilter] = useState('All')
 
+  // Handler functions for project actions
+  const handleViewProject = (projectId: string) => {
+    console.log('Viewing project:', projectId)
+  }
+
+  const handleEditProject = (projectId: string) => {
+    console.log('Editing project:', projectId)
+  }
+
+  const handleArchiveProject = (projectId: string) => {
+    if (confirm('Are you sure you want to archive this project?')) {
+      console.log('Archiving project:', projectId)
+    }
+  }
+
+  const handleDeleteProject = (projectId: string) => {
+    if (confirm('Are you sure you want to delete this project?')) {
+      console.log('Deleting project:', projectId)
+    }
+  }
+
   const filteredProjects = mockProjects.filter(project => {
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -240,9 +267,34 @@ export default function ProjectsKanbanPage() {
               {project.description}
             </CardDescription>
           </div>
-          <Button variant="ghost" size="icon" className="h-6 w-6">
-            <MoreHorizontal className="h-3 w-3" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-6 w-6">
+                <MoreHorizontal className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleViewProject(project.id)}>
+                <Eye className="h-4 w-4 mr-2" />
+                View Project
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleEditProject(project.id)}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Project
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleArchiveProject(project.id)}>
+                <MessageSquare className="h-4 w-4 mr-2" />
+                Archive
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => handleDeleteProject(project.id)}
+                className="text-red-600 dark:text-red-400"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </CardHeader>
       

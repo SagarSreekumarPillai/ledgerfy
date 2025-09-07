@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
@@ -17,6 +18,27 @@ import {
 
 export default function SimpleDashboardPage() {
   const [activeTab, setActiveTab] = useState('overview')
+  const router = useRouter()
+
+  // Handler functions for quick actions
+  const handleCreateInvoice = () => {
+    // Navigate to invoice creation page or open modal
+    router.push('/dashboard/documents/upload')
+  }
+
+  const handleAddClient = () => {
+    router.push('/dashboard/clients/new')
+  }
+
+  const handleRecordPayment = () => {
+    // Navigate to payment recording page
+    router.push('/dashboard/ledger')
+  }
+
+  const handleScheduleMeeting = () => {
+    // Navigate to calendar or meeting scheduling
+    router.push('/dashboard/compliance/calendar')
+  }
 
   const stats = [
     { title: 'Total Revenue', value: '$124,563.00', change: '+12.5%', icon: DollarSign, color: 'text-green-600' },
@@ -155,19 +177,19 @@ export default function SimpleDashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button className="w-full justify-start" variant="outline" onClick={handleCreateInvoice}>
                     <FileText className="w-4 h-4 mr-2" />
                     Create Invoice
                   </Button>
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button className="w-full justify-start" variant="outline" onClick={handleAddClient}>
                     <Users className="w-4 h-4 mr-2" />
                     Add Client
                   </Button>
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button className="w-full justify-start" variant="outline" onClick={handleRecordPayment}>
                     <DollarSign className="w-4 h-4 mr-2" />
                     Record Payment
                   </Button>
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button className="w-full justify-start" variant="outline" onClick={handleScheduleMeeting}>
                     <Calendar className="w-4 h-4 mr-2" />
                     Schedule Meeting
                   </Button>

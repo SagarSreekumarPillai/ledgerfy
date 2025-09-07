@@ -563,3 +563,4 @@ export default function NewUserPage() {
     </div>
   )
 }
+

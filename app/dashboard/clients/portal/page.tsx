@@ -79,6 +79,27 @@ export default function ClientPortalPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [showUploadModal, setShowUploadModal] = useState(false)
+  const [showMeetingModal, setShowMeetingModal] = useState(false)
+  const [showReportModal, setShowReportModal] = useState(false)
+  const [showReminderModal, setShowReminderModal] = useState(false)
+
+  // Handler functions
+  const handleUploadDocuments = () => {
+    setShowUploadModal(true)
+  }
+
+  const handleScheduleMeeting = () => {
+    setShowMeetingModal(true)
+  }
+
+  const handleRequestReport = () => {
+    setShowReportModal(true)
+  }
+
+  const handleSetReminders = () => {
+    setShowReminderModal(true)
+  }
 
   // Mock data
   const clientInfo = {
@@ -630,19 +651,19 @@ export default function ClientPortalPage() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Button variant="outline" className="h-20 flex-col gap-2">
+                    <Button variant="outline" className="h-20 flex-col gap-2" onClick={handleUploadDocuments}>
                       <Upload className="h-6 w-6" />
                       <span>Upload Documents</span>
                     </Button>
-                    <Button variant="outline" className="h-20 flex-col gap-2">
+                    <Button variant="outline" className="h-20 flex-col gap-2" onClick={handleScheduleMeeting}>
                       <Calendar className="h-6 w-6" />
                       <span>Schedule Meeting</span>
                     </Button>
-                    <Button variant="outline" className="h-20 flex-col gap-2">
+                    <Button variant="outline" className="h-20 flex-col gap-2" onClick={handleRequestReport}>
                       <BarChart3 className="h-6 w-6" />
                       <span>Request Report</span>
                     </Button>
-                    <Button variant="outline" className="h-20 flex-col gap-2">
+                    <Button variant="outline" className="h-20 flex-col gap-2" onClick={handleSetReminders}>
                       <Bell className="h-6 w-6" />
                       <span>Set Reminders</span>
                     </Button>
@@ -653,6 +674,181 @@ export default function ClientPortalPage() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Upload Documents Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-4">Upload Documents</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Upload documents for {clientInfo.name}. Supported formats: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG.
+            </p>
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                <p className="text-sm text-gray-500">Click to upload or drag and drop files</p>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setShowUploadModal(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => {
+                  // Implement upload logic here
+                  setShowUploadModal(false)
+                }}>
+                  Upload
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule Meeting Modal */}
+      {showMeetingModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-4">Schedule Meeting</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Schedule a meeting with {clientInfo.name}.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Meeting Type</label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select meeting type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="consultation">Consultation</SelectItem>
+                    <SelectItem value="review">Review Meeting</SelectItem>
+                    <SelectItem value="planning">Planning Session</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Preferred Date</label>
+                <Input type="date" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Notes</label>
+                <textarea className="w-full p-2 border rounded-md" rows={3} placeholder="Additional notes..."></textarea>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setShowMeetingModal(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => {
+                  // Implement meeting scheduling logic here
+                  setShowMeetingModal(false)
+                }}>
+                  Schedule
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Request Report Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-4">Request Report</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Request a custom report for {clientInfo.name}.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Report Type</label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select report type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="financial">Financial Report</SelectItem>
+                    <SelectItem value="compliance">Compliance Report</SelectItem>
+                    <SelectItem value="tax">Tax Report</SelectItem>
+                    <SelectItem value="audit">Audit Report</SelectItem>
+                    <SelectItem value="custom">Custom Report</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Date Range</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Input type="date" placeholder="From" />
+                  <Input type="date" placeholder="To" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Additional Requirements</label>
+                <textarea className="w-full p-2 border rounded-md" rows={3} placeholder="Specific requirements..."></textarea>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setShowReportModal(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => {
+                  // Implement report request logic here
+                  setShowReportModal(false)
+                }}>
+                  Request Report
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Set Reminders Modal */}
+      {showReminderModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-4">Set Reminders</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Set up reminders for {clientInfo.name}.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Reminder Type</label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select reminder type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="deadline">Deadline Reminder</SelectItem>
+                    <SelectItem value="meeting">Meeting Reminder</SelectItem>
+                    <SelectItem value="payment">Payment Reminder</SelectItem>
+                    <SelectItem value="compliance">Compliance Reminder</SelectItem>
+                    <SelectItem value="custom">Custom Reminder</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Reminder Date</label>
+                <Input type="datetime-local" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Message</label>
+                <textarea className="w-full p-2 border rounded-md" rows={3} placeholder="Reminder message..."></textarea>
+              </div>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setShowReminderModal(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => {
+                  // Implement reminder setting logic here
+                  setShowReminderModal(false)
+                }}>
+                  Set Reminder
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

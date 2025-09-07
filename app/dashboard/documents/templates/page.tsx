@@ -25,6 +25,12 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 
 interface DocumentTemplate {
@@ -163,6 +169,29 @@ export default function DocumentTemplatesPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [activeTab, setActiveTab] = useState('all')
 
+  // Handler functions for template actions
+  const handleViewTemplate = (templateId: string) => {
+    console.log('Viewing template:', templateId)
+  }
+
+  const handleEditTemplate = (templateId: string) => {
+    console.log('Editing template:', templateId)
+  }
+
+  const handleDuplicateTemplate = (templateId: string) => {
+    console.log('Duplicating template:', templateId)
+  }
+
+  const handleDeleteTemplate = (templateId: string) => {
+    if (confirm('Are you sure you want to delete this template?')) {
+      console.log('Deleting template:', templateId)
+    }
+  }
+
+  const handleDownloadTemplate = (templateId: string) => {
+    console.log('Downloading template:', templateId)
+  }
+
   const filteredTemplates = mockTemplates.filter(template => {
     const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -221,9 +250,38 @@ export default function DocumentTemplatesPage() {
             <Badge className={getStatusColor(template.status)}>
               {template.status}
             </Badge>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleViewTemplate(template.id)}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  View Template
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleEditTemplate(template.id)}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Template
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDuplicateTemplate(template.id)}>
+                  <Copy className="h-4 w-4 mr-2" />
+                  Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDownloadTemplate(template.id)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Download
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleDeleteTemplate(template.id)}
+                  className="text-red-600 dark:text-red-400"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </CardHeader>

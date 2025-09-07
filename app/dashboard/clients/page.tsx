@@ -23,6 +23,12 @@ import {
   User
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 
 // Mock data for clients
@@ -132,6 +138,29 @@ export default function ClientsPage() {
   const [selectedStatus, setSelectedStatus] = useState('All Status')
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+
+  // Handler functions for client actions
+  const handleViewClient = (clientId: number) => {
+    router.push(`/dashboard/clients/${clientId}`)
+  }
+
+  const handleEditClient = (clientId: number) => {
+    router.push(`/dashboard/clients/${clientId}/edit`)
+  }
+
+  const handleDeleteClient = (clientId: number) => {
+    if (confirm('Are you sure you want to delete this client?')) {
+      // Implement delete logic here
+      console.log('Deleting client:', clientId)
+    }
+  }
+
+  const handleArchiveClient = (clientId: number) => {
+    if (confirm('Are you sure you want to archive this client?')) {
+      // Implement archive logic here
+      console.log('Archiving client:', clientId)
+    }
+  }
 
   const filteredClients = clients.filter(client => {
     const matchesSearch = client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -334,9 +363,34 @@ export default function ClientsPage() {
                   <Building2 className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="relative">
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleViewClient(client.id)}>
+                        <Eye className="h-4 w-4 mr-2" />
+                        View Details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEditClient(client.id)}>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit Client
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleArchiveClient(client.id)}>
+                        <FileText className="h-4 w-4 mr-2" />
+                        Archive
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => handleDeleteClient(client.id)}
+                        className="text-red-600 dark:text-red-400"
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
               
@@ -407,11 +461,11 @@ export default function ClientsPage() {
                 </div>
 
                 <div className="flex items-center space-x-2 pt-3">
-                  <Button variant="outline" size="sm" className="flex-1">
+                  <Button variant="outline" size="sm" className="flex-1" onClick={() => handleViewClient(client.id)}>
                     <Eye className="h-4 w-4 mr-2" />
                     View
                   </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
+                  <Button variant="outline" size="sm" className="flex-1" onClick={() => handleEditClient(client.id)}>
                     <Edit className="h-4 w-4 mr-2" />
                     Edit
                   </Button>
@@ -507,13 +561,13 @@ export default function ClientsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleViewClient(client.id)}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleEditClient(client.id)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleDeleteClient(client.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

@@ -8,6 +8,7 @@ import {
   Download, 
   Copy, 
   Edit, 
+  Trash2,
   Star,
   Calendar,
   User,
@@ -28,6 +29,12 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
@@ -200,6 +207,29 @@ export default function ComplianceTemplatesPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [activeTab, setActiveTab] = useState('all')
 
+  // Handler functions for compliance template actions
+  const handleViewTemplate = (templateId: string) => {
+    console.log('Viewing compliance template:', templateId)
+  }
+
+  const handleEditTemplate = (templateId: string) => {
+    console.log('Editing compliance template:', templateId)
+  }
+
+  const handleDuplicateTemplate = (templateId: string) => {
+    console.log('Duplicating compliance template:', templateId)
+  }
+
+  const handleDeleteTemplate = (templateId: string) => {
+    if (confirm('Are you sure you want to delete this compliance template?')) {
+      console.log('Deleting compliance template:', templateId)
+    }
+  }
+
+  const handleDownloadTemplate = (templateId: string) => {
+    console.log('Downloading compliance template:', templateId)
+  }
+
   const filteredTemplates = mockComplianceTemplates.filter(template => {
     const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -268,9 +298,38 @@ export default function ComplianceTemplatesPage() {
             <Badge className={getStatusColor(template.status)}>
               {template.status}
             </Badge>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleViewTemplate(template.id)}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  View Template
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleEditTemplate(template.id)}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Template
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDuplicateTemplate(template.id)}>
+                  <Copy className="h-4 w-4 mr-2" />
+                  Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDownloadTemplate(template.id)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Download
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleDeleteTemplate(template.id)}
+                  className="text-red-600 dark:text-red-400"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </CardHeader>
